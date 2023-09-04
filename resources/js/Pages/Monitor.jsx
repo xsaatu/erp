@@ -1,12 +1,17 @@
 import Navbar from "@/Components/Navbar";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Homepage(props) {
+
+export default function Monitor( {auth}, props) {
     console.log(props);
     return (
         <>
-            <Navbar />
+        <AuthenticatedLayout
+            user={auth.user}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Monitor</h2>}
+        >
             <div className="flex flex-col justify-center items-center ">
-                {props.product ? props.product.map((data, i) => {
+                {props.myProduct ? props.myProduct.map((data, i) => {
                     return (
                         <div key={i}>
                             <p>{data.so}</p>
@@ -17,6 +22,7 @@ export default function Homepage(props) {
                     )
                 }) : ''};
             </div>
+            </AuthenticatedLayout>
         </>
     )
 }

@@ -19,8 +19,6 @@ export default function Dashboard({ auth }, props) {
         setEst('')
     };
 
-    console.log('props last : ', props);
-
     return (
         <AuthenticatedLayout
             user={auth.user}

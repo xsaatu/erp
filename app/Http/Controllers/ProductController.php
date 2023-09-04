@@ -7,22 +7,24 @@ use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
+use function GuzzleHttp\Promise\all;
+
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    // public function login()
-    // {
-    //     $product = Product::all();
-    //     return Inertia::render('Auth/Login', [
-    //         'product' => $product,
-    //         ]);
-    // }
+    public function login()
+    {
+
+        return Inertia::render('Auth/Login', [
+            'product' => $product,
+            ]);
+    }
     public function index()
     {
-        $product = Product::all();
-        return Inertia::render('Dashboard', [
+        $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
+        return Inertia::render('Monitor', [
             'product' => $product,
             ]);
     }
@@ -47,7 +49,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $myProduct = $product::where('name', auth()->user()->email)->get();
+        $myProduct = $product::where('auth', auth()->user()->email)->get();
         return Inertia::render('Dashboard', [
             'myProduct' => $myProduct,
         ]);
