@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Dashboard({ auth }, props) {
+export default function Dashboard(props) {
     const [so, setSo] = useState('');
     const [name, setName] = useState('');
     const [process, setProcess] = useState('');
@@ -19,11 +19,12 @@ export default function Dashboard({ auth }, props) {
         setEst('')
     };
 
+    // console.log(props);
+
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            user={props.auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
-            errors={props.errors}
         >
             <Head title="Dashboard" />
 
@@ -39,7 +40,7 @@ export default function Dashboard({ auth }, props) {
                 </div>
             </div>
             <div>
-                {props.myNews}
+                //
             </div>
         </AuthenticatedLayout>
     );

@@ -18,7 +18,6 @@ class ProductController extends Controller
     {
 
         return Inertia::render('Auth/Login', [
-            'product' => $product,
             ]);
     }
     public function index()
@@ -46,11 +45,14 @@ class ProductController extends Controller
 
     /**
      * Display the specified resource.
+     * @param  \App\Models\Product
+     * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
     {
-        $myProduct = $product::where('auth', auth()->user()->email)->get();
-        return Inertia::render('Dashboard', [
+        $myProduct = $product::where('author', auth()->user()->email)->get();
+        console.log($myProduct);
+        return Inertia::render('Monitor', [
             'myProduct' => $myProduct,
         ]);
     }
