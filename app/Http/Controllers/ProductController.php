@@ -23,6 +23,7 @@ class ProductController extends Controller
     public function index()
     {
         $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
+
         return Inertia::render('Monitor', [
             'product' => $product,
             ]);
@@ -79,5 +80,16 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    // seacrh
+    public function search(Request $request) 
+    {
+        if($request->has('search')) {
+            $produk = Product::where('so','LIKE','%'.$request->search.'%')->get();
+        }
+        return Inertia::render('Monitor', [
+          'produk' => $produk,
+        ]);
     }
 }
