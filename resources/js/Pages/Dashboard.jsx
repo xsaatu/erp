@@ -1,4 +1,5 @@
 import AddData from '@/Components/Dashboard/AddData';
+import AddMachine from '@/Components/Dashboard/AddMachine';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
@@ -20,7 +21,6 @@ export default function Dashboard(props) {
     //     setEst('')
     // };
 
-    // console.log(props);
 
     return (
         <AuthenticatedLayout
@@ -30,7 +30,7 @@ export default function Dashboard(props) {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="flex max-w-7xl gap-5 mx-auto sm:px-6 lg:px-8">
                     {/* <div className="p-6 bg-white border-b border-grey-200">
                         <input type="text" placeholder="SO" className="m-3 input w-full" onChange={(so) => setSo(so.target.value)} value={so} />
                         <input type="text" placeholder="Nama" className="m-3 input w-full" onChange={(name) => setName(name.target.value)} value={name} />
@@ -39,6 +39,7 @@ export default function Dashboard(props) {
                         <button className='btn btn-primary m-2' onClick={() => handleSubmit()}>Submit</button>
                     </div> */}
                     <AddData />
+                    <AddMachine />
                 </div>
             </div>
             <div>

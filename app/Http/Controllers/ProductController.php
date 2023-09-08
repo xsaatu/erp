@@ -23,7 +23,6 @@ class ProductController extends Controller
     public function index()
     {
         $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
-
         return Inertia::render('Monitor', [
             'product' => $product,
             ]);
@@ -52,7 +51,6 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $myProduct = $product::where('author', auth()->user()->email)->get();
-        console.log($myProduct);
         return Inertia::render('Monitor', [
             'myProduct' => $myProduct,
         ]);

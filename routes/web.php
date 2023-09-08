@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MachineController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +23,7 @@ Route::post('/product', [ProductController::class, 'store']);
 Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
+Route::post('/machine', [MachineController::class, 'store']);
 
 // Route::get('/product', [ProductController::class, 'index']);
 
