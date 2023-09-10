@@ -34,7 +34,7 @@ export default function Monitor(props) {
         </div>
 
         <div className='flex justify-center flex-col lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4'>
-            {/* <ProductLists product={props.product.data} /> */}
+            <ProductLists product={props.product.data} />
                 <ProductSearch produk={props.produk}/>
 
         </div>

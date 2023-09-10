@@ -23,6 +23,8 @@ Route::post('/product', [ProductController::class, 'store']);
 Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
+
+Route::get('/dashboard', [MachineController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/machine', [MachineController::class, 'store']);
 
 // Route::get('/product', [ProductController::class, 'index']);
