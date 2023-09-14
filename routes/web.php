@@ -24,13 +24,13 @@ Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth',
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
 
-Route::get('/dashboard', [MachineController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/machine', [MachineController::class, 'store']);
 
 // Route::get('/product', [ProductController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
+    Route::get('/machines', [MachineContorller::class, 'index']);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

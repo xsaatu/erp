@@ -23,7 +23,8 @@ export default function Dashboard(props) {
     // };
 
 
-    console.log(props.machine);
+
+    // console.log(props.machine);
 
     return (
         <AuthenticatedLayout

@@ -1,11 +1,13 @@
-const Select = (machine) => {
+const Select = (props) => {
     // const mesin = props.machine;
-    return machine.map((data, i) => {
-        return <select className="select w-full max-w-xs">
-            <option disabled selected>Pick your favorite Simpson</option>
-            <option key={i}>{data.nama}</option>
-        </select>
-    })
+
+
+        // return <select className="select w-full max-w-xs" value="pilih">
+        //     <option disabled selected>Pilih Mesin</option>
+        //         {props.mesin?.map((data) => {
+        //             <option value={data.value}>{data.name}</option>
+        //         })}
+        // </select>
 }
 
 export default Select;

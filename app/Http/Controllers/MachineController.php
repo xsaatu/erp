@@ -14,10 +14,7 @@ class MachineController extends Controller
      */
     public function index()
     {
-        $machine = new Machine();
-        return Inertia::render('Dashboard', [
-            'machine' => $machine,
-        ]);
+        $machine = Machine::all()->get();
     }
 
 

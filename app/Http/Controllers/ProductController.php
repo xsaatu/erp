@@ -22,10 +22,16 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
+
+        $product = Product::all();
         return Inertia::render('Monitor', [
             'product' => $product,
             ]);
+    }
+
+    public function select()
+    {
+        $machines = Machine::all();
     }
 
 
