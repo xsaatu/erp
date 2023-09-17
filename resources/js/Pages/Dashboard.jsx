@@ -24,7 +24,7 @@ export default function Dashboard(props) {
 
 
 
-    // console.log(props.machine);
+    // console.log(props);
 
     return (
         <AuthenticatedLayout
@@ -35,7 +35,7 @@ export default function Dashboard(props) {
 
             <div className="py-12">
                 <div className="flex max-w-7xl gap-5 mx-auto sm:px-6 lg:px-8">
-                    <AddData />
+                    <AddData machine = {props.machine}/>
                     <AddMachine />
                 </div>
             </div>

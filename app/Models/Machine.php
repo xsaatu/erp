@@ -9,8 +9,8 @@ class Machine extends Model
 {
     use HasFactory;
 
-    public function Product()
+    public function machine()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Machine::class, 'kode');
     }
 }

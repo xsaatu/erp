@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductCollection;
+use App\Http\Resources\MachineCollection;
 use App\Models\Product;
+use App\Models\Machine;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -23,15 +25,18 @@ class ProductController extends Controller
     public function index()
     {
 
-        $product = Product::all();
+        $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
         return Inertia::render('Monitor', [
             'product' => $product,
             ]);
     }
 
-    public function select()
+    public function index2()
     {
-        $machines = Machine::all();
+        $machine = new MachineCollection(Machine::OrderByDesc('id')->paginate(8));
+        return Inertia::render('Dashboard', [
+            'machine' => $machine,
+        ]);
     }
 
 

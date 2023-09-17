@@ -14,7 +14,10 @@ class MachineController extends Controller
      */
     public function index()
     {
-        $machine = Machine::all()->get();
+        $machine = new MachineCollection(Machine::OrderByDesc('id')->paginate(8));
+        return Inertia::render('Dashboard', [
+            'machine' => $machine,
+        ]);
     }
 
 

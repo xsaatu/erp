@@ -1,10 +1,9 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
-// import Select from "./Select";
 
 export default function AddData(props) {
 
-    console.log(props);
+    // console.log(props.machine.data);
 
     const [so, setSo] = useState('');
     const [name, setName] = useState('');
@@ -97,21 +96,27 @@ export default function AddData(props) {
         setEst('')
     };
 
-    const mesins = [
-        {name: "giling", waittime: 5},
-        { name: "potong", waittime: 10},
-        { name: "press", waittime: 0.5},
-    ]
+    // const mesins = [
+    //     {name: "giling", waittime: 5},
+    //     { name: "potong", waittime: 10},
+    //     { name: "press", waittime: 0.5},
+    // ]
 
+    const machine = props.machine.data;
+
+    // console.log(machine);
     const Select = () => {
-        return <select className="select w-full max-w-xs" >
-        {/* <option disabled selected>Pilih Mesin</option> */}
-            {mesins.map((mesin, i) => (
-                <option key={i}>{mesin.name}</option>
+        return <select className="select w-full max-w-xs">
+        <option disabled selected>Pilih Mesin</option>
+            {machine.map((mesin, i) => (
+                <option key={i} value={mesin.kode}>{mesin.nama}</option>
             ))}
         </select>
     }
 
+    const handleChange = () => {
+        setData()
+    }
 
     return (
         <>
@@ -121,7 +126,7 @@ export default function AddData(props) {
                 <div className="p-6 bg-white border-b border-grey-200">
                     <input type="text" placeholder="SO" className="m-3 input w-full" onChange={(so) => setSo(so.target.value)} value={so} />
                     <input type="text" placeholder="Nama" className="m-3 input w-full" onChange={(name) => setName(name.target.value)} value={name} />
-                    <Select onChange={(estimasi1) => setEstimasi1(estimasi1.target.value)} value={estimasi1}/>
+                    <Select onChange={(process1) => setProcess1(process1.target.machine)}/>
                     <input type="number" placeholder="Estimasi 1" className="m-3 input w-full" onChange={(estimasi1) => setEstimasi1(estimasi1.target.value)} value={estimasi1} />
                     <input type="text" placeholder="Process 2" className="m-3 input w-full" onChange={(process2) => setProcess2(process2.target.value)} value={process2} />
                     <input type="number" placeholder="Estimasi 2" className="m-3 input w-full" onChange={(estimasi2) => setEstimasi2(estimasi2.target.value)} value={estimasi2} />
