@@ -1,76 +1,206 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## beberapa logic untuk mengurangi tanggal 
+## Cara ke 1
+Untuk mengurangi hari dari tanggal yang sudah Anda tentukan dalam kolom `delivery_date` dalam tabel produk di Laravel versi 10, Anda dapat membuat fungsi yang dapat Anda panggil ketika perlu mengurangkan hari. Berikut adalah contoh cara Anda dapat melakukannya:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Langkah 1: Buat Model
 
-## About Laravel
+Pastikan Anda memiliki model yang sesuai untuk tabel produk. Anda dapat membuat model dengan menggunakan perintah berikut:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```bash
+php artisan make:model Product
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Langkah 2: Buat Fungsi di Model
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Tambahkan fungsi di dalam model `Product` Anda untuk mengurangkan hari dari tanggal `delivery_date`. Dalam model `Product`, Anda dapat menambahkan fungsi seperti berikut:
 
-## Learning Laravel
+```php
+use Carbon\Carbon;
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+class Product extends Model
+{
+    // ...
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    public function reduceDeliveryDate($days)
+    {
+        // Pastikan $this->delivery_date adalah tanggal yang ingin Anda kurangi
+        $deliveryDate = Carbon::parse($this->delivery_date);
+        $newDeliveryDate = $deliveryDate->subDays($days);
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+        $this->delivery_date = $newDeliveryDate;
+        $this->save();
 
-## Laravel Sponsors
+        return $newDeliveryDate;
+    }
+}
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Pastikan Anda telah mengimpor `Carbon` di atas model Anda.
 
-### Premium Partners
+Langkah 3: Panggil Fungsi di Kontroller
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Kemudian, Anda dapat memanggil fungsi ini dari dalam kontroller saat Anda ingin mengurangkan hari dari `delivery_date`. Misalnya, jika Anda ingin mengurangkan 3 hari dari `delivery_date`, Anda dapat melakukannya seperti ini di dalam kontroller:
 
-## Contributing
+```php
+use App\Product;
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+class ProductController extends Controller
+{
+    public function reduceDeliveryDate($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $newDeliveryDate = $product->reduceDeliveryDate(3); // Mengurangkan 3 hari
+        return response()->json(['new_delivery_date' => $newDeliveryDate]);
+    }
+}
+```
 
-## Code of Conduct
+Pastikan Anda mengganti `3` dengan jumlah hari yang sesuai dengan kebutuhan Anda.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Langkah 4: Panggil dari Frontend React
 
-## Security Vulnerabilities
+Terakhir, dari aplikasi React Anda, Anda dapat membuat permintaan HTTP ke kontroller Laravel yang sesuai untuk memanggil fungsi ini. Anda dapat menggunakan axios atau metode lain untuk melakukan permintaan ke Laravel dan memperbarui tanggal pengiriman.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Ini adalah contoh sederhana menggunakan axios dalam komponen React:
 
-## License
+```javascript
+import React, { useState } from 'react';
+import axios from 'axios';
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+const ProductComponent = () => {
+  const [newDeliveryDate, setNewDeliveryDate] = useState(null);
 
-## Input Data
+  const handleReduceDeliveryDate = async () => {
+    try {
+      const response = await axios.post(`/reduce-delivery-date/${productId}`);
+      setNewDeliveryDate(response.data.new_delivery_date);
+    } catch (error) {
+      console.error('Error reducing delivery date:', error);
+    }
+  };
 
-    <div className="p-6 bg-white border-b border-grey-200">
-        <input type="text" placeholder="" className="m-3 input w-full" onChange={() => setTest(text.target.value)} value={text} />
-        <input type="text" placeholder="" className="m-3 input w-full" onChange={() => setText(text.target.value)} value={text} />
-        <input type="text" placeholder="" className="m-3 input w-full" onChange={() => setText(text.target.value)} value={text} />
-        <input type="text" placeholder="" className="m-3 input w-full" onChange={() => setText(text.target.value)} value={text} />
-        <button className='btn btn-primary m-2' >Submit</button>
+  return (
+    <div>
+      <button onClick={handleReduceDeliveryDate}>Reduce Delivery Date</button>
+      {newDeliveryDate && (
+        <p>New Delivery Date: {newDeliveryDate}</p>
+      )}
     </div>
+  );
+};
+
+export default ProductComponent;
+```
+
+Pastikan Anda mengganti `productId` dengan ID produk yang sesuai dan sesuaikan URL permintaan HTTP dengan route yang Anda buat di Laravel.
+
+Dengan langkah-langkah ini, Anda dapat mengurangkan hari dari tanggal `delivery_date` dalam tabel produk ketika diperlukan melalui aplikasi Anda.
+
+## Cara ke 2
+Untuk mengurangi 1 hari dari tanggal pengiriman (delivery_date) di setiap proses dalam pembuatan produk sebanyak 15 langkah, Anda dapat membuat logika yang akan melakukan pengurangan tanggal pengiriman setiap kali proses selesai. Berikut adalah cara Anda dapat melakukannya:
+
+Langkah 1: Buat Model
+
+Pastikan Anda memiliki model yang sesuai untuk tabel produk. Anda dapat membuat model dengan menggunakan perintah berikut:
+
+```bash
+php artisan make:model Product
+```
+
+Langkah 2: Buat Fungsi di Model
+
+Tambahkan fungsi di dalam model `Product` Anda yang akan mengurangkan satu hari dari tanggal pengiriman (`delivery_date`) setiap kali proses selesai. Dalam model `Product`, Anda dapat menambahkan fungsi seperti berikut:
+
+```php
+use Carbon\Carbon;
+
+class Product extends Model
+{
+    // ...
+
+    public function reduceDeliveryDate()
+    {
+        // Pastikan $this->delivery_date adalah tanggal yang ingin Anda kurangi
+        $deliveryDate = Carbon::parse($this->delivery_date);
+        $newDeliveryDate = $deliveryDate->subDay();
+
+        $this->delivery_date = $newDeliveryDate;
+        $this->save();
+
+        return $newDeliveryDate;
+    }
+}
+```
+
+Pastikan Anda telah mengimpor `Carbon` di atas model Anda.
+
+Langkah 3: Panggil Fungsi di Kontroller
+
+Selanjutnya, dalam kontroller yang mengendalikan proses pembuatan produk, panggil fungsi `reduceDeliveryDate` dari model `Product` setiap kali proses selesai. Misalnya, jika Anda memiliki 15 langkah proses dalam sebuah kontroller, Anda dapat mengurangkan satu hari dari tanggal pengiriman setiap kali langkah selesai:
+
+```php
+use App\Product;
+
+class ProductController extends Controller
+{
+    public function createProduct()
+    {
+        $product = new Product();
+        $product->delivery_date = '2023-12-31'; // Ganti dengan tanggal awal pengiriman
+
+        // Langkah 1
+        // ...
+        $product->reduceDeliveryDate();
+
+        // Langkah 2
+        // ...
+        $product->reduceDeliveryDate();
+
+        // Lanjutkan dengan langkah-langkah lainnya
+
+        // Simpan produk setelah semua proses selesai
+        $product->save();
+
+        return response()->json(['message' => 'Product created successfully']);
+    }
+}
+```
+
+Pastikan Anda mengganti tanggal awal pengiriman sesuai dengan kebutuhan Anda.
+
+Langkah 4: Panggil dari Frontend React
+
+Terakhir, dari aplikasi React Anda, Anda dapat membuat permintaan HTTP ke kontroller Laravel yang sesuai setiap kali proses selesai. Anda dapat menggunakan axios atau metode lain untuk melakukan permintaan ke Laravel dan memperbarui tanggal pengiriman.
+
+Ini adalah contoh sederhana menggunakan axios dalam komponen React:
+
+```javascript
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const ProductComponent = () => {
+  const [message, setMessage] = useState('');
+
+  const handleProcessCompletion = async () => {
+    try {
+      await axios.post(`/complete-process`);
+      setMessage('Process completed successfully.');
+    } catch (error) {
+      console.error('Error completing process:', error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleProcessCompletion}>Complete Process</button>
+      {message && <p>{message}</p>}
+    </div>
+  );
+};
+
+export default ProductComponent;
+```
+
+Pastikan Anda memanggil route yang sesuai di permintaan HTTP, yang akan menjalankan proses pembuatan produk di Laravel.
+
+Dengan langkah-langkah ini, Anda dapat mengurangkan satu hari dari tanggal pengiriman (`delivery_date`) setiap kali proses pembuatan produk selesai melalui aplikasi Anda, dan Anda dapat melakukan ini dalam 15 langkah proses sebagaimana yang Anda inginkan.

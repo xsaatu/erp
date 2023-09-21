@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('so');
             $table->string('name');
+            $table->date('tengat_waktu');
             $table->string('process1');
             $table->float('estimasi1');
             $table->string('process2');

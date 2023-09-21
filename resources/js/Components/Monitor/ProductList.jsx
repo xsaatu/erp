@@ -12,6 +12,7 @@ const isProduct = (product) => {
           <p>{data.name}</p>
           <div className="card-actions justify-end">
             <div className="badge badge-inline">{data.process}</div>
+            <div className="badge badge-inline">{data.tengat_waktu}</div>
             <div className="badge badge-outline">{data.est}</div>
           </div>
         </div>

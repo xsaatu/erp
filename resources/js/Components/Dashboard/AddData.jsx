@@ -7,6 +7,7 @@ export default function AddData(props) {
 
     const [so, setSo] = useState('');
     const [name, setName] = useState('');
+    const [tengat_waktu, setTengat_waktu] = useState('');
     const [process1, setProcess1] = useState('');
     const [estimasi1, setEstimasi1] = useState('');
     const [process2, setProcess2] = useState('');
@@ -43,6 +44,7 @@ export default function AddData(props) {
         const data = {
             so, 
             name,
+            tengat_waktu,
             process1, estimasi1, 
             process2, estimasi2, 
             process3, estimasi3, 
@@ -63,6 +65,7 @@ export default function AddData(props) {
         router.post('/product', data);
         setSo('')
         setName('')
+        setTengat_waktu('');
         setProcess1('')
         setEstimasi1('')
         setProcess2('')
@@ -105,11 +108,11 @@ export default function AddData(props) {
     const machine = props.machine.data;
 
     // console.log(machine);
-    const Select = () => {
-        return <select className="select w-full max-w-xs">
+    const Select = ({dvalue, change}) => {
+        return <select className="select w-full max-w-xs" defaultValue={dvalue} onChange={(dvalue) => change(dvalue.target.value)}>
         <option disabled selected>Pilih Mesin</option>
             {machine.map((mesin, i) => (
-                <option key={i} value={mesin.kode}>{mesin.nama}</option>
+                <option key={i} value={mesin.nama}>{mesin.nama}</option>
             ))}
         </select>
     }
@@ -126,7 +129,8 @@ export default function AddData(props) {
                 <div className="p-6 bg-white border-b border-grey-200">
                     <input type="text" placeholder="SO" className="m-3 input w-full" onChange={(so) => setSo(so.target.value)} value={so} />
                     <input type="text" placeholder="Nama" className="m-3 input w-full" onChange={(name) => setName(name.target.value)} value={name} />
-                    <Select onChange={(process1) => setProcess1(process1.target.machine)}/>
+                    <input type="date" className="m-3 input w-full" onChange={(tengat_waktu) => setTengat_waktu(tengat_waktu.target.value)}/>
+                    <Select dvalue={process1} change={setProcess1}/>
                     <input type="number" placeholder="Estimasi 1" className="m-3 input w-full" onChange={(estimasi1) => setEstimasi1(estimasi1.target.value)} value={estimasi1} />
                     <input type="text" placeholder="Process 2" className="m-3 input w-full" onChange={(process2) => setProcess2(process2.target.value)} value={process2} />
                     <input type="number" placeholder="Estimasi 2" className="m-3 input w-full" onChange={(estimasi2) => setEstimasi2(estimasi2.target.value)} value={estimasi2} />
