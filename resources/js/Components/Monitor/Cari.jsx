@@ -1,23 +1,31 @@
+import { Link } from "@inertiajs/react"
+
 const isSearch = (produk) => {
-    return produk.map((data, i) => {
-        return <div key={i} className="stats shadow">
-        <div className="stat place-items-center">
-          <div className="stat-title">Nomor Produk</div>
-          <div className="stat-value">{data.so}</div>
-        </div>
-        
-        <div className="stat place-items-center">
-          <div className="stat-title">Nama</div>
-          <div className="stat-value text-secondary">{data.name}</div>
-        </div>
-        
-        <div className="stat place-items-center">
-          <div className="stat-title">Estimasi</div>
-          <div className="stat-value">{data.est}</div>
-        </div>
-        
+    return <div className="overflow-x-auto">
+      <table className="table table-zebra">
+          <thead>
+            <tr>
+              <th>ID Product</th>
+              <th>Nama</th>
+              <th>Action</th>
+              <th>Action</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          {produk.map((data, i) => {
+            return <tr key={i}>
+                  <td>{data.so}</td>
+                  <td>{data.name}</td>
+                  <td><Link as="button" className="btn btn-info btn-xs text-white">Edit</Link></td>
+                  <td><Link href="view" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">View</Link></td>
+                  <td><Link  as="button" className="btn btn-error btn-xs text-white">Delete</Link></td>
+                </tr>
+           })}
+
+          </tbody>
+        </table>
       </div>
-    })
 }
 
 const noProduct = () => {

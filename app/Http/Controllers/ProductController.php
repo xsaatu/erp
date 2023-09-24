@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Machine;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use function GuzzleHttp\Promise\all;
 
@@ -48,6 +49,7 @@ class ProductController extends Controller
         $product = new Product();
         $product->so = $request->so;
         $product->name = $request->name;
+        $product->tanggal_pesan = $request->tanggal_pesan;
         $product->tengat_waktu = $request->tengat_waktu;
         $product->process1 = $request->process1 ?? '';
         $product->estimasi1 = $request->estimasi1 ?? 0.00;
@@ -129,6 +131,41 @@ class ProductController extends Controller
         }
         return Inertia::render('Monitor', [
           'produk' => $produk,
+        ]);
+    }
+
+    public function view(Product $product, Request $request)
+    {
+        $produk = $product->find($request->id);
+        $deliveryDate = Carbon::parse($produk->tengat_waktu);
+        $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+        // for( $i = 0; $i <= 15; $i++ ) {
+        //     $deliveryDate->subDay();
+        // }
+
+            // Daftar List
+            $tanggal = [];
+            $processes = [];
+
+            // Iterasi untuk setiap langkah proses
+            for ($i = 0; $i < 16; $i++) {
+                $processes[] = [
+                    'step' => $i + 1, // Langkah ke-
+                    'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+                ];
+    
+                $deliveryDate->subDay(); // Mengurangkan satu hari
+            }
+
+            $tanggal[] = [
+                'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+            ];
+
+        return Inertia::render('View', [
+            'viewProduct' => $produk,
+            'tanggalProcess' => $processes,
+            'tanggal' => $tanggal,
         ]);
     }
 }

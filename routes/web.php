@@ -23,6 +23,7 @@ Route::post('/product', [ProductController::class, 'store']);
 Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
+Route::get('/product/view', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
 
 Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
