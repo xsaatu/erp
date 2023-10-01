@@ -1,11 +1,62 @@
 import Navbar from "@/Components/Navbar";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 
 export default function View(props) {
+    
     const produk = props.viewProduct;
     const tanggal = props.tanggalProcess;
     const tanggalPesan = props.tanggal[0];
-    console.log(tanggalPesan);
+    
+    // Render 1
+    // const [product, setProduct] = useState(produk);
+
+    // useEffect(() => {
+    //     if (Object.keys(product.process1).length === 0) {
+    //         return <tr>
+    //                 <td>1</td>
+    //                 <td>{product.process1}</td> 
+    //                 <td>{product.estimasi1}</td>
+    //                 <td>actual</td> 
+    //                 <td>{tanggal[15].delivery_date}</td>
+    //             </tr>
+    //       }
+      
+    //       if (Object.keys(product.process1).length > 0) {
+    //         return <tr>
+    //                 <td>1</td>
+    //                 <td>{product.process1}</td> 
+    //                 <td>{product.estimasi1}</td>
+    //                 <td>actual</td> 
+    //                 {/* <td>{tanggal[15].delivery_date}</td> */}
+    //             </tr>
+    //       }
+    // }, [product]);
+
+    // Render 2
+    // const Detail = () => {
+    //     if((produk.process1).length > 0) {
+    //        return <tr>
+    //                 <td>1</td>
+    //                 <td>{produk.process1}</td> 
+    //                 <td>{produk.estimasi1}</td>
+    //                 <td>actual</td> 
+    //                 <td>{tanggal.delivery_date}</td>
+    //             </tr>
+    //             if((produk.process2).length > 0) {
+
+    //             }
+    //     } else {
+    //         console.log("EMPTY!!!");
+    //     }
+
+    // }
+
+    // Render 3
+    const nomorProses = Array.from({ length: 15 }, (_, index) => index + 1);
+
+    console.log(props);
     return <>
 
         <Navbar />
@@ -13,8 +64,8 @@ export default function View(props) {
         <div id="head_product">
             <div className="container">
                 <div className="grid grid-cols-3 gap-3 m-5">
-                    <div><input className="input-xs" value={produk.so} disabled></input></div>
-                    <div><input className="input-xs" value={props.tanggal[0].tanggal_pesan} disabled></input></div>
+                    <div><input className="input-xs" value={props.viewProduct.so} disabled></input></div>
+                    <div><input className="input-xs" value={tanggalPesan.tanggal_pesan} disabled></input></div>
                     <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div>
                 </div>
             </div>
@@ -32,13 +83,48 @@ export default function View(props) {
                 </tr>
             </thead> 
             <tbody>
-                <tr>
+                {nomorProses.map((nomor) => {
+                const processKey = `process${nomor}`;
+                const estimasiKey = `estimasi${nomor}`;
+                const tanggalKey = tanggal.length - nomor;
+
+                // Cek apakah proses kosong
+                const isProcessEmpty = !produk[processKey];
+
+                if (!isProcessEmpty) {
+                return (
+                    <tr key={nomor}>
+                    <td>{nomor}</td>
+                    <td>{produk[processKey]}</td>
+                    <td>{produk[estimasiKey]}</td>
+                    <td>actual</td>
+                    <td>{tanggal[tanggalKey]?.delivery_date}</td>
+                    </tr>
+                );
+                } else {
+                console.log(`Proses ${nomor} EMPTY!!!`);
+                return null; // Jika proses kosong, return null agar tidak ditampilkan dalam tabel
+                }
+            })}
+
+            {/* {viewProduct.map((process, index) => (
+                    <tr key={index}>
+                        <td>{process.step}</td>
+                        <td>{process.process}</td>
+                        <td>{process.estimasi}</td>
+                        <td>{process.actual}</td>
+                        <td>{process.delivery_date}</td>
+                    </tr>
+                ))} */}
+
+                {/* <tr>
                     <td>1</td>
                     <td>{produk.process1}</td> 
                     <td>{produk.estimasi1}</td>
                     <td>actual</td> 
                     <td>{tanggal[15].delivery_date}</td>
                 </tr>
+                
                 <tr>
                     <td>1</td>
                     <td>{produk.process2}</td> 
@@ -136,7 +222,7 @@ export default function View(props) {
                     <td>{produk.estimasi15}</td>
                     <td>actual</td> 
                     <td>{tanggal[1].delivery_date}</td>
-                </tr>
+                </tr> */}
             </tbody> 
             </table>
         </div>

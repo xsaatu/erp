@@ -140,6 +140,7 @@ class ProductController extends Controller
         $deliveryDate = Carbon::parse($produk->tengat_waktu);
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
 
+
         // for( $i = 0; $i <= 15; $i++ ) {
         //     $deliveryDate->subDay();
         // }
@@ -148,12 +149,16 @@ class ProductController extends Controller
             $tanggal = [];
             $processes = [];
 
-            // Iterasi untuk setiap langkah proses
-            for ($i = 0; $i < 16; $i++) {
-                $processes[] = [
-                    'step' => $i + 1, // Langkah ke-
-                    'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
-                ];
+            // untuk menghitung tanggal di setiap prosesnya
+            for($i = 0; $i < 16; $i++) {
+                $processColumnName = "process" . ($i + 1);
+
+                if(!empty($produk->$processColumnName)) {
+                    $processes[] = [
+                        'step' => $i + 1, // Langkah ke-
+                        'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+                    ];
+                }
     
                 $deliveryDate->subDay(); // Mengurangkan satu hari
             }
@@ -166,6 +171,7 @@ class ProductController extends Controller
             'viewProduct' => $produk,
             'tanggalProcess' => $processes,
             'tanggal' => $tanggal,
+            // 'totalSteps' => $totalSteps,
         ]);
     }
 }
