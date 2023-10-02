@@ -109,3 +109,16 @@ Dengan langkah-langkah ini, Anda dapat mengurangkan satu hari dari tanggal pengi
 
 ## Sekalian Check EMPTY lihat ke Produc Controller
 ## Render View
+## Add 2 proses tetap
+## cara ke 1
+
+// Menambahkan proses Quality dan Finish
+$processes[] = [
+  'step' => 0, // Proses Quality
+  'delivery_date' => $deliveryDate->copy()->subDay(2)->format('d-m-Y'),
+];
+        
+$processes[] = [
+  'step' => 17, // Proses Finish
+  'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
+];

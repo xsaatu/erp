@@ -97,7 +97,7 @@ export default function View(props) {
                     <td>{nomor}</td>
                     <td>{produk[processKey]}</td>
                     <td>{produk[estimasiKey]}</td>
-                    <td>actual</td>
+                    <td>Actual</td>
                     <td>{tanggal[tanggalKey]?.delivery_date}</td>
                     </tr>
                 );
@@ -106,6 +106,21 @@ export default function View(props) {
                 return null; // Jika proses kosong, return null agar tidak ditampilkan dalam tabel
                 }
             })}
+
+            <tr>
+                <td>998</td>
+                <td>Quality Process</td>
+                <td>0</td>
+                <td>Actual</td>
+                <td>{tanggal[1].delivery_date}</td>
+            </tr>
+            <tr>
+                <td>999</td>
+                <td>Finish</td>
+                <td>0</td>
+                <td>Actual</td>
+                <td>{tanggal[0].delivery_date}</td>
+            </tr>
 
             {/* {viewProduct.map((process, index) => (
                     <tr key={index}>

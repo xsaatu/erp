@@ -140,15 +140,69 @@ class ProductController extends Controller
         $deliveryDate = Carbon::parse($produk->tengat_waktu);
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
 
-
-        // for( $i = 0; $i <= 15; $i++ ) {
-        //     $deliveryDate->subDay();
-        // }
-
-            // Daftar List
             $tanggal = [];
             $processes = [];
 
+            // Menambahkan proses Quality dan Finish
+            $processes[] = [
+                'step' => 0, // Proses Quality
+                'Quality Proses',
+                'delivery_date' => $deliveryDate->copy()->subDay(2)->format('d-m-Y'),
+            ];
+        
+            $processes[] = [
+                'step' => 17, // Proses Finish
+                'Finish',
+                'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
+            ];
+
+            $totalSteps = 16;
+
+            // PROSES KE 1
+            // for ($i = 0; $i < $totalSteps; $i++) {
+            //     $processColumnName = "process" . ($i + 1);
+        
+            //     // Tambahkan validasi untuk "Quality Proses" dan "Finish Production"
+            //     if (!empty($produk->$processColumnName) || $i == $totalSteps - 2 || $i == $totalSteps - 1) {
+            //         $processName = $i == $totalSteps - 2 ? 'Quality Proses' : ($i == $totalSteps - 1 ? 'Finish Production' : 'Langkah ' . ($i + 1));
+            //         $processes[] = [
+            //             'step' => $i + 1, // Langkah ke-
+            //             'step_name' => $processName, // Nama proses
+            //             'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+            //         ];
+            //     }
+        
+            //     $deliveryDate->subDay(); // Mengurangkan satu hari
+            // }
+
+            // Tanggal Quality Proses dan Finish Production
+            // $qualityProsesDate = $deliveryDate->copy()->subDay(2); // 2 hari sebelum delivery date
+            // $finishProductionDate = $deliveryDate->copy()->subDay(1); // 1 hari sebelum delivery date
+
+            // // Untuk menghitung tanggal di setiap prosesnya
+            // for ($i = 0; $i < $totalSteps; $i++) {
+            //     if ($i == $totalSteps - 2) {
+            //         $processName = 'Quality Proses';
+            //         $stepDate = $qualityProsesDate;
+            //     } elseif ($i == $totalSteps - 1) {
+            //         $processName = 'Finish Production';
+            //         $stepDate = $finishProductionDate;
+            //     } else {
+            //         $processColumnName = "process" . ($i + 1);
+            //         $processName = 'Langkah ' . ($i + 1);
+            //         $stepDate = $deliveryDate;
+            //     }
+
+            //     $processes[] = [
+            //         'step' => $i + 1, // Langkah ke-
+            //         'step_name' => $processName, // Nama proses
+            //         'delivery_date' => $stepDate->format('d-m-Y'), // Format tanggal
+            //     ];
+
+            //     $deliveryDate->subDay(); // Mengurangkan satu hari
+            // }
+
+            // PROSES ASLINYA
             // untuk menghitung tanggal di setiap prosesnya
             for($i = 0; $i < 16; $i++) {
                 $processColumnName = "process" . ($i + 1);
