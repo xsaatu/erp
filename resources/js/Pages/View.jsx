@@ -107,7 +107,7 @@ export default function View(props) {
                 }
             })}
 
-            <tr>
+            {/* <tr>
                 <td>998</td>
                 <td>Quality Process</td>
                 <td>0</td>
@@ -120,7 +120,7 @@ export default function View(props) {
                 <td>0</td>
                 <td>Actual</td>
                 <td>{tanggal[0].delivery_date}</td>
-            </tr>
+            </tr> */}
 
             {/* {viewProduct.map((process, index) => (
                     <tr key={index}>

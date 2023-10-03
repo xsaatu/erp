@@ -144,17 +144,17 @@ class ProductController extends Controller
             $processes = [];
 
             // Menambahkan proses Quality dan Finish
-            $processes[] = [
-                'step' => 0, // Proses Quality
-                'Quality Proses',
-                'delivery_date' => $deliveryDate->copy()->subDay(2)->format('d-m-Y'),
-            ];
+            // $processes[] = [
+            //     'step' => 0, // Proses Quality
+            //     'Quality Proses',
+            //     'delivery_date' => $deliveryDate->copy()->subDay(2)->format('d-m-Y'),
+            // ];
         
-            $processes[] = [
-                'step' => 17, // Proses Finish
-                'Finish',
-                'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
-            ];
+            // $processes[] = [
+            //     'step' => 17, // Proses Finish
+            //     'Finish',
+            //     'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
+            // ];
 
             $totalSteps = 16;
 
@@ -202,6 +202,8 @@ class ProductController extends Controller
             //     $deliveryDate->subDay(); // Mengurangkan satu hari
             // }
 
+        
+
             // PROSES ASLINYA
             // untuk menghitung tanggal di setiap prosesnya
             for($i = 0; $i < 16; $i++) {
@@ -217,6 +219,31 @@ class ProductController extends Controller
                 $deliveryDate->subDay(); // Mengurangkan satu hari
             }
 
+            $foundFinish = false; // Untuk melacak apakah "Proses Finish" telah ditemukan
+
+            // Cek apakah ada proses Finish dan kurangkan tanggal jika ditemukan
+            // foreach ($processes as &$process) {
+            //     if (!$foundFinish && $this->isFinishProcess($process)) {
+            //         $finishDate = Carbon::parse($produk->$processColumnName);
+            //         $process['delivery_date'] = $finishDate->format('d-m-Y');
+            //         $deliveryDate->subDays(1); // Mengurangkan satu hari dari Delivery Date
+            //         $foundFinish = true; // Menandai bahwa "Proses Finish" telah ditemukan
+            //     }
+            // }
+
+            
+            // Mengekstrak semua nama proses ke dalam array
+            $processNames = array_column($processes, 'name');
+
+            // Cek apakah "Proses Finish" ada dalam array
+            $hasFinishProcess = in_array('Finish', $processNames);
+
+            $processes[] = [
+                'step' => 17, // Proses Finish
+                'Finish',
+                'delivery_date' => $hasFinishProcess ? true : $deliveryDate->subDay()->format('d-m-Y'),
+            ];
+
             $tanggal[] = [
                 'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
             ];
@@ -228,4 +255,11 @@ class ProductController extends Controller
             // 'totalSteps' => $totalSteps,
         ]);
     }
+    // Fungsi bantu untuk memeriksa apakah ini "Proses Finish"
+    // private function isFinishProcess($process)
+    // {
+    //     // Sesuaikan logika ini dengan cara Anda menyimpan data "Proses Finish" dalam $process
+    //     return isset($process['process']) && strtolower($process['process']) === 'finish';
+    // }
+
 }
