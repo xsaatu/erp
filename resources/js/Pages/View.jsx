@@ -66,7 +66,7 @@ export default function View(props) {
                 <div className="grid grid-cols-3 gap-3 m-5">
                     <div><input className="input-xs" value={props.viewProduct.so} disabled></input></div>
                     <div><input className="input-xs" value={tanggalPesan.tanggal_pesan} disabled></input></div>
-                    <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div>
+                    {/* <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div> */}
                 </div>
             </div>
         </div>

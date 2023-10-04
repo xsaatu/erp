@@ -205,19 +205,19 @@ class ProductController extends Controller
         
 
             // PROSES ASLINYA
-            // untuk menghitung tanggal di setiap prosesnya
-            for($i = 0; $i < 16; $i++) {
-                $processColumnName = "process" . ($i + 1);
+            //untuk menghitung tanggal di setiap prosesnya
+            // for($i = 0; $i < 16; $i++) {
+            //     $processColumnName = "process" . ($i + 1);
 
-                if(!empty($produk->$processColumnName)) {
-                    $processes[] = [
-                        'step' => $i + 1, // Langkah ke-
-                        'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
-                    ];
-                }
+            //     if(!empty($produk->$processColumnName)) {
+            //         $processes[] = [
+            //             'step' => $i + 1, // Langkah ke-
+            //             'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+            //         ];
+            //     }
     
-                $deliveryDate->subDay(); // Mengurangkan satu hari
-            }
+            //     $deliveryDate->subDay(); // Mengurangkan satu hari
+            // }
 
             $foundFinish = false; // Untuk melacak apakah "Proses Finish" telah ditemukan
 
@@ -231,18 +231,49 @@ class ProductController extends Controller
             //     }
             // }
 
-            
-            // Mengekstrak semua nama proses ke dalam array
-            $processNames = array_column($processes, 'name');
+            // logic 2
+            // // Mengekstrak semua nama proses ke dalam array
+            // $processNames = array_column($processes, 'name');
 
-            // Cek apakah "Proses Finish" ada dalam array
-            $hasFinishProcess = in_array('Finish', $processNames);
+            // // Cek apakah "Proses Finish" ada dalam array
+            // $hasFinishProcess = in_array('Finish', $processNames);
 
-            $processes[] = [
-                'step' => 17, // Proses Finish
-                'Finish',
-                'delivery_date' => $hasFinishProcess ? true : $deliveryDate->subDay()->format('d-m-Y'),
-            ];
+            // $processes[] = [
+            //     'step' => 17, // Proses Finish
+            //     'Finish',
+            //     'delivery_date' => $hasFinishProcess ? true : $deliveryDate->subDay()->format('d-m-Y'),
+            // ];
+
+            // Logic 3
+            // Menghitung tanggal di setiap proses lainnya
+            for ($i = 0; $i < 15; $i++) {
+                $processColumnName = "process" . ($i + 1);
+                $processValue = $produk->$processColumnName;
+
+                // Memeriksa apakah nilai dalam kolom proses adalah tanggal yang valid
+                if (!empty($processValue) && strtotime($processValue)) {
+                    $processes[] = [
+                        'step' => $i + 1, // Langkah ke-
+                        'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+                    ];
+                }
+
+                $deliveryDate->subDay(); // Mengurangkan satu hari
+            }
+            // Temukan di mana "Proses Finish" terletak dalam array
+            $finishStep = $this->findFinishStep($produk);
+
+            if ($finishStep !== null) {
+                $finishDate = Carbon::parse($produk->{"process" . $finishStep});
+
+                // Tambahkan tanggal-tanggal antara langkah 5 dan "Proses Finish"
+                for ($step = 6; $step < $finishStep; $step++) {
+                    $processes[] = [
+                        'step' => $step + 1,
+                        'delivery_date' => $finishDate->copy()->subDays($finishStep - $step)->format('d-m-Y'),
+                    ];
+                }
+            }
 
             $tanggal[] = [
                 'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
@@ -255,11 +286,21 @@ class ProductController extends Controller
             // 'totalSteps' => $totalSteps,
         ]);
     }
-    // Fungsi bantu untuk memeriksa apakah ini "Proses Finish"
-    // private function isFinishProcess($process)
-    // {
-    //     // Sesuaikan logika ini dengan cara Anda menyimpan data "Proses Finish" dalam $process
-    //     return isset($process['process']) && strtolower($process['process']) === 'finish';
-    // }
+    // Fungsi bantu untuk menemukan di mana "Proses Finish" terletak dalam array proses
+    private function findFinishStep($product)
+    {
+        // Sesuaikan logika ini dengan cara Anda menyimpan informasi "Proses Finish"
+        for ($step = 1; $step <= 15; $step++) {
+            $processColumnName = "process" . ($step + 1);
+            $processValue = $product->$processColumnName;
+    
+            if (!empty($processValue) && strtotime($processValue) && strtolower($processValue) !== 'finish') {
+                return $step;
+            }
+        }
+
+    
+        return null; // Mengembalikan null jika "Proses Finish" tidak ditemukan
+    }    
 
 }
