@@ -22,6 +22,8 @@ Route::get('/', [ProductController::class, 'login']);
 Route::post('/product', [ProductController::class, 'store']);
 Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
+Route::get('/product/edit', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit.product');
+Route::post('/product/update', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/view', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
 

@@ -102,9 +102,12 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product, string $id, Request $request)
     {
-        //
+        $myProduct = $product->find($request->id);
+        return Inertia::render('', [
+            'myNews' => $myProduct,
+        ]);
     }
 
     /**
@@ -112,7 +115,21 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Product::where('id', $request->id)->update([
+            'so' => $request->so ?? 0,
+            'name' => $request->name ?? '',
+            
+            // Validasi tanggal_pesan
+            // 'tanggal_pesan' => $request->tanggal_pesan ?? $product->tanggal_pesan,
+            
+            // Validasi tengat_waktu
+            // 'tengat_waktu' => $request->tengat_waktu ?? $product->tengat_waktu,
+            
+            // Validasi process1 hingga process15 dan estimasi1 hingga estimasi15
+            'process1' => $request->process1 ?? '',
+            'estimasi1' => $request->estimasi1 ?? 0.00,
+        ]);
+        return to_route('dashboard');
     }
 
     /**
