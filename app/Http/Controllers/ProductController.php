@@ -102,32 +102,70 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product, string $id, Request $request)
+    public function edit(Product $product, Request $request)
     {
-        $myProduct = $product->find($request->id);
-        return Inertia::render('', [
-            'myNews' => $myProduct,
+        $produk = $product->find($request->id);
+        $machine = new MachineCollection(Machine::OrderByDesc('id')->paginate(8));
+        return Inertia::render('Edit', [
+            'myProduct' => $produk,
+            'myMachine' => $machine,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         Product::where('id', $request->id)->update([
-            'so' => $request->so ?? 0,
-            'name' => $request->name ?? '',
-            
-            // Validasi tanggal_pesan
-            // 'tanggal_pesan' => $request->tanggal_pesan ?? $product->tanggal_pesan,
-            
-            // Validasi tengat_waktu
-            // 'tengat_waktu' => $request->tengat_waktu ?? $product->tengat_waktu,
-            
-            // Validasi process1 hingga process15 dan estimasi1 hingga estimasi15
+            'so' => $request->so,
+            'name' => $request->name,
+            'tanggal_pesan' => $request->tanggal_pesan,
+            'tengat_waktu' => $request->tengat_waktu,
             'process1' => $request->process1 ?? '',
             'estimasi1' => $request->estimasi1 ?? 0.00,
+            'process2' => $request->process2 ?? '',
+            'estimasi2'  => $request->estimasi2 ?? 0.00,
+
+            'process3' => $request->process3 ?? '',
+            'estimasi3'  => $request->estimasi3 ?? 0.00,
+
+            'process4' => $request->process4 ?? '',
+            'estimasi4'  => $request->estimasi4 ?? 0.00,
+
+            'process5' => $request->process5 ?? '',
+            'estimasi5'  => $request->estimasi5 ?? 0.00,
+
+            'process6' => $request->process6 ?? '',
+            'estimasi6'  => $request->estimasi6 ?? 0.00,
+
+            'process7' => $request->process7 ?? '',
+            'estimasi7'  => $request->estimasi7 ?? 0.00,
+
+            'process8' => $request->process8 ?? '',
+            'estimasi8'  => $request->estimasi8 ?? 0.00,
+
+            'process9' => $request->process9 ?? '',
+            'estimasi9' => $request->estimasi9 ?? 0.00,
+
+            'process10' => $request->process10 ?? '',
+            'estimasi10' => $request->estimasi10 ?? 0.00,
+
+            'process11' => $request->process11 ?? '',
+            'estimasi11' => $request->estimasi11 ?? 0.00,
+
+            'process12' => $request->process12 ?? '',
+            'estimasi12' => $request->estimasi12 ?? 0.00,
+
+            'process13' => $request->process13 ?? '',
+            'estimasi13' => $request->estimasi13 ?? 0.00,
+
+            'process14' => $request->process14 ?? '',
+            'estimasi14' => $request->estimasi14 ?? 0.00,
+
+            'process15' => $request->process15 ?? '',
+            'estimasi15' => $request->estimasi15 ?? 0.00,
+            'est' => $request->est,
         ]);
         return to_route('dashboard');
     }
@@ -135,9 +173,11 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $product = Product::find($request->id);
+        $product->delete();
+        return redirect()->back()->with('message', 'Tulisan Berhasil dihapus');
     }
 
     // seacrh
@@ -159,6 +199,51 @@ class ProductController extends Controller
 
             $tanggal = [];
             $processes = [];
+ 
+
+                // Menghitung tanggal di setiap prosesnya
+                for ($i = 0; $i < 16; $i++) {
+                    $processColumnName = "process" . ($i + 1);
+
+                    if (!empty($produk->$processColumnName)) {
+                        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+                        $processDate = $deliveryDate->copy()->max($tanggalpesan);
+                        
+                        $processes[] = [
+                            'step' => $i + 1, // Langkah ke-
+                            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+                        ];
+                    }
+
+                    $deliveryDate->subDay(); // Mengurangkan satu hari
+                }
+
+            $tanggal[] = [
+                'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+            ];
+
+        return Inertia::render('View', [
+            'viewProduct' => $produk,
+            'tanggalProcess' => $processes,
+            'tanggal' => $tanggal,
+        ]);
+    }
+}
+
+            // PROSES ASLINYA
+            // //untuk menghitung tanggal di setiap prosesnya
+            // for($i = 0; $i < 16; $i++) {
+            //     $processColumnName = "process" . ($i + 1);
+
+            //     if(!empty($produk->$processColumnName)) {
+            //         $processes[] = [
+            //             'step' => $i + 1, // Langkah ke-
+            //             'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
+            //         ];
+            //     }
+    
+            //     $deliveryDate->subDay(); // Mengurangkan satu hari
+            // }
 
             // Menambahkan proses Quality dan Finish
             // $processes[] = [
@@ -173,30 +258,13 @@ class ProductController extends Controller
             //     'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
             // ];
 
-            $totalSteps = 16;
+            // $totalSteps = 15;
 
-            // PROSES KE 1
-            // for ($i = 0; $i < $totalSteps; $i++) {
-            //     $processColumnName = "process" . ($i + 1);
-        
-            //     // Tambahkan validasi untuk "Quality Proses" dan "Finish Production"
-            //     if (!empty($produk->$processColumnName) || $i == $totalSteps - 2 || $i == $totalSteps - 1) {
-            //         $processName = $i == $totalSteps - 2 ? 'Quality Proses' : ($i == $totalSteps - 1 ? 'Finish Production' : 'Langkah ' . ($i + 1));
-            //         $processes[] = [
-            //             'step' => $i + 1, // Langkah ke-
-            //             'step_name' => $processName, // Nama proses
-            //             'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
-            //         ];
-            //     }
-        
-            //     $deliveryDate->subDay(); // Mengurangkan satu hari
-            // }
-
-            // Tanggal Quality Proses dan Finish Production
+            // // Tanggal Quality Proses dan Finish Production
             // $qualityProsesDate = $deliveryDate->copy()->subDay(2); // 2 hari sebelum delivery date
             // $finishProductionDate = $deliveryDate->copy()->subDay(1); // 1 hari sebelum delivery date
 
-            // // Untuk menghitung tanggal di setiap prosesnya
+            // // // // Untuk menghitung tanggal di setiap prosesnya
             // for ($i = 0; $i < $totalSteps; $i++) {
             //     if ($i == $totalSteps - 2) {
             //         $processName = 'Quality Proses';
@@ -218,106 +286,3 @@ class ProductController extends Controller
 
             //     $deliveryDate->subDay(); // Mengurangkan satu hari
             // }
-
-        
-
-            // PROSES ASLINYA
-            //untuk menghitung tanggal di setiap prosesnya
-            // for($i = 0; $i < 16; $i++) {
-            //     $processColumnName = "process" . ($i + 1);
-
-            //     if(!empty($produk->$processColumnName)) {
-            //         $processes[] = [
-            //             'step' => $i + 1, // Langkah ke-
-            //             'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
-            //         ];
-            //     }
-    
-            //     $deliveryDate->subDay(); // Mengurangkan satu hari
-            // }
-
-            $foundFinish = false; // Untuk melacak apakah "Proses Finish" telah ditemukan
-
-            // Cek apakah ada proses Finish dan kurangkan tanggal jika ditemukan
-            // foreach ($processes as &$process) {
-            //     if (!$foundFinish && $this->isFinishProcess($process)) {
-            //         $finishDate = Carbon::parse($produk->$processColumnName);
-            //         $process['delivery_date'] = $finishDate->format('d-m-Y');
-            //         $deliveryDate->subDays(1); // Mengurangkan satu hari dari Delivery Date
-            //         $foundFinish = true; // Menandai bahwa "Proses Finish" telah ditemukan
-            //     }
-            // }
-
-            // logic 2
-            // // Mengekstrak semua nama proses ke dalam array
-            // $processNames = array_column($processes, 'name');
-
-            // // Cek apakah "Proses Finish" ada dalam array
-            // $hasFinishProcess = in_array('Finish', $processNames);
-
-            // $processes[] = [
-            //     'step' => 17, // Proses Finish
-            //     'Finish',
-            //     'delivery_date' => $hasFinishProcess ? true : $deliveryDate->subDay()->format('d-m-Y'),
-            // ];
-
-            // Logic 3
-            // Menghitung tanggal di setiap proses lainnya
-            for ($i = 0; $i < 15; $i++) {
-                $processColumnName = "process" . ($i + 1);
-                $processValue = $produk->$processColumnName;
-
-                // Memeriksa apakah nilai dalam kolom proses adalah tanggal yang valid
-                if (!empty($processValue) && strtotime($processValue)) {
-                    $processes[] = [
-                        'step' => $i + 1, // Langkah ke-
-                        'delivery_date' => $deliveryDate->format('d-m-Y'), // Format tanggal
-                    ];
-                }
-
-                $deliveryDate->subDay(); // Mengurangkan satu hari
-            }
-            // Temukan di mana "Proses Finish" terletak dalam array
-            $finishStep = $this->findFinishStep($produk);
-
-            if ($finishStep !== null) {
-                $finishDate = Carbon::parse($produk->{"process" . $finishStep});
-
-                // Tambahkan tanggal-tanggal antara langkah 5 dan "Proses Finish"
-                for ($step = 6; $step < $finishStep; $step++) {
-                    $processes[] = [
-                        'step' => $step + 1,
-                        'delivery_date' => $finishDate->copy()->subDays($finishStep - $step)->format('d-m-Y'),
-                    ];
-                }
-            }
-
-            $tanggal[] = [
-                'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
-            ];
-
-        return Inertia::render('View', [
-            'viewProduct' => $produk,
-            'tanggalProcess' => $processes,
-            'tanggal' => $tanggal,
-            // 'totalSteps' => $totalSteps,
-        ]);
-    }
-    // Fungsi bantu untuk menemukan di mana "Proses Finish" terletak dalam array proses
-    private function findFinishStep($product)
-    {
-        // Sesuaikan logika ini dengan cara Anda menyimpan informasi "Proses Finish"
-        for ($step = 1; $step <= 15; $step++) {
-            $processColumnName = "process" . ($step + 1);
-            $processValue = $product->$processColumnName;
-    
-            if (!empty($processValue) && strtotime($processValue) && strtolower($processValue) !== 'finish') {
-                return $step;
-            }
-        }
-
-    
-        return null; // Mengembalikan null jika "Proses Finish" tidak ditemukan
-    }    
-
-}

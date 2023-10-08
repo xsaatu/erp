@@ -122,3 +122,30 @@ $processes[] = [
   'step' => 17, // Proses Finish
   'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
 ];
+
+## Max date
+  $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+## Take subday from est
+for ($i = 0; $i < 16; $i++) {
+    $processColumnName = "process" . ($i + 1);
+
+    if (!empty($produk->$processColumnName)) {
+        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+        $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+        // Ambil estimasi untuk proses ini dari database
+        $estimasiColumnName = "estimasi_process" . ($i + 1);
+        $estimasi = $produk->$estimasiColumnName;
+
+        // Kurangkan tanggal proses dengan estimasi yang sesuai
+        $processDate->subDays($estimasi);
+
+        $processes[] = [
+            'step' => $i + 1, // Langkah ke-
+            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+        ];
+    }
+
+    $deliveryDate->subDay(); // Mengurangkan satu hari
+}

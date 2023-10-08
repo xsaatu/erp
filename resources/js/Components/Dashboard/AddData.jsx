@@ -2,7 +2,6 @@ import { router } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function AddData(props) {
-
     // console.log(props.machine.data);
 
     const [so, setSo] = useState('');
@@ -120,9 +119,6 @@ export default function AddData(props) {
         </select>
     }
 
-    const handleChange = () => {
-        setData()
-    }
 
     return (
         <>
