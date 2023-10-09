@@ -1,114 +1,4 @@
-## beberapa logic untuk mengurangi tanggal 
-Untuk mengurangi 1 hari dari tanggal pengiriman (delivery_date) di setiap proses dalam pembuatan produk sebanyak 15 langkah, Anda dapat membuat logika yang akan melakukan pengurangan tanggal pengiriman setiap kali proses selesai. Berikut adalah cara Anda dapat melakukannya:
 
-Langkah 1: Buat Model
-
-Pastikan Anda memiliki model yang sesuai untuk tabel produk. Anda dapat membuat model dengan menggunakan perintah berikut:
-
-```bash
-php artisan make:model Product
-```
-
-Langkah 2: Buat Fungsi di Model
-
-Tambahkan fungsi di dalam model `Product` Anda yang akan mengurangkan satu hari dari tanggal pengiriman (`delivery_date`) setiap kali proses selesai. Dalam model `Product`, Anda dapat menambahkan fungsi seperti berikut:
-
-```php
-use Carbon\Carbon;
-
-class Product extends Model
-{
-    // ...
-
-    public function reduceDeliveryDate()
-    {
-        // Pastikan $this->delivery_date adalah tanggal yang ingin Anda kurangi
-        $deliveryDate = Carbon::parse($this->delivery_date);
-        $newDeliveryDate = $deliveryDate->subDay();
-
-        $this->delivery_date = $newDeliveryDate;
-        $this->save();
-
-        return $newDeliveryDate;
-    }
-}
-```
-
-Pastikan Anda telah mengimpor `Carbon` di atas model Anda.
-
-Langkah 3: Panggil Fungsi di Kontroller
-
-Selanjutnya, dalam kontroller yang mengendalikan proses pembuatan produk, panggil fungsi `reduceDeliveryDate` dari model `Product` setiap kali proses selesai. Misalnya, jika Anda memiliki 15 langkah proses dalam sebuah kontroller, Anda dapat mengurangkan satu hari dari tanggal pengiriman setiap kali langkah selesai:
-
-```php
-use App\Product;
-
-class ProductController extends Controller
-{
-    public function createProduct()
-    {
-        $product = new Product();
-        $product->delivery_date = '2023-12-31'; // Ganti dengan tanggal awal pengiriman
-
-        // Langkah 1
-        // ...
-        $product->reduceDeliveryDate();
-
-        // Langkah 2
-        // ...
-        $product->reduceDeliveryDate();
-
-        // Lanjutkan dengan langkah-langkah lainnya
-
-        // Simpan produk setelah semua proses selesai
-        $product->save();
-
-        return response()->json(['message' => 'Product created successfully']);
-    }
-}
-```
-
-Pastikan Anda mengganti tanggal awal pengiriman sesuai dengan kebutuhan Anda.
-
-Langkah 4: Panggil dari Frontend React
-
-Terakhir, dari aplikasi React Anda, Anda dapat membuat permintaan HTTP ke kontroller Laravel yang sesuai setiap kali proses selesai. Anda dapat menggunakan axios atau metode lain untuk melakukan permintaan ke Laravel dan memperbarui tanggal pengiriman.
-
-Ini adalah contoh sederhana menggunakan axios dalam komponen React:
-
-```javascript
-import React, { useState } from 'react';
-import axios from 'axios';
-
-const ProductComponent = () => {
-  const [message, setMessage] = useState('');
-
-  const handleProcessCompletion = async () => {
-    try {
-      await axios.post(`/complete-process`);
-      setMessage('Process completed successfully.');
-    } catch (error) {
-      console.error('Error completing process:', error);
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={handleProcessCompletion}>Complete Process</button>
-      {message && <p>{message}</p>}
-    </div>
-  );
-};
-
-export default ProductComponent;
-```
-
-Pastikan Anda memanggil route yang sesuai di permintaan HTTP, yang akan menjalankan proses pembuatan produk di Laravel.
-
-Dengan langkah-langkah ini, Anda dapat mengurangkan satu hari dari tanggal pengiriman (`delivery_date`) setiap kali proses pembuatan produk selesai melalui aplikasi Anda, dan Anda dapat melakukan ini dalam 15 langkah proses sebagaimana yang Anda inginkan.
-
-## Sekalian Check EMPTY lihat ke Produc Controller
-## Render View
 ## Add 2 proses tetap
 ## cara ke 1
 
@@ -149,3 +39,144 @@ for ($i = 0; $i < 16; $i++) {
 
     $deliveryDate->subDay(); // Mengurangkan satu hari
 }
+
+## Convert
+Untuk mengonversi nilai 0.5 menjadi setengah hari dalam objek Carbon, Anda dapat menggunakan metode `addHours()` untuk menambahkan setengah hari (12 jam) ke objek Carbon. Berikut adalah contoh cara melakukannya:
+
+```php
+$nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
+
+$carbonDate = Carbon::now(); // Inisialisasi objek Carbon, bisa diganti dengan tanggal yang sesuai
+$carbonDate->addHours($nilaiNumerik * 24); // Menambahkan setengah hari (12 jam) ke objek Carbon
+
+echo $carbonDate->toDateTimeString(); // Output hasil konversi
+```
+
+Dalam contoh di atas, kita mengalikan nilai numerik (0.5) dengan 24 untuk mengonversinya menjadi jam (setengah hari), lalu menggunakan `addHours()` untuk menambahkannya ke objek Carbon. Anda dapat mengganti `$carbonDate` dengan tanggal yang sesuai, dan hasilnya akan berisi tanggal dan waktu yang setengah hari lebih besar dari tanggal awal.
+## Try from est
+## 1
+$jumlahMesin = 3; // Ganti dengan jumlah mesin yang Anda miliki
+$jumlahProsesPerUrutan = 3; // Ganti dengan jumlah proses per urutan yang Anda miliki
+
+$tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+$tanggal = [];
+$processes = [];
+
+// Iterasi melalui mesin
+for ($mesinIndex = 0; $mesinIndex < $jumlahMesin; $mesinIndex++) {
+    // Anda perlu mengganti ini dengan cara untuk mendapatkan waktu tunggu mesin yang sesuai
+    $waktuTungguMesin = $this->getWaktuTungguMesinByProses($mesinIndex);
+
+    // Iterasi melalui proses per urutan pada setiap mesin
+    for ($prosesIndex = 0; $prosesIndex < $jumlahProsesPerUrutan; $prosesIndex++) {
+        $processColumnName = "process" . ($prosesIndex + 1);
+
+        if (!empty($produk->$processColumnName)) {
+            // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+            $deliveryDate = Carbon::parse($produk->tengat_waktu);
+            $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+            // Mengurangkan waktu tunggu mesin yang sesuai dari tanggal proses
+            $processDate->subDays($waktuTungguMesin);
+
+            $processes[] = [
+                'mesin' => $mesinIndex + 1, // Nomor mesin
+                'proses' => $prosesIndex + 1, // Nomor proses pada urutan mesin
+                'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+            ];
+        }
+    }
+}
+
+$tanggal[] = [
+    'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+];
+
+return Inertia::render('View', [
+    'viewProduct' => $produk,
+    'tanggalProcess' => $processes,
+    'tanggal' => $tanggal,
+]);
+
+## 2
+Untuk mengurangkan `subDay()` dengan jumlah yang Anda hitung sebelumnya sebagai `$jumlahMesin`, Anda dapat memodifikasi loop proses Anda sebagai berikut:
+
+```php
+$jumlahMesin = 0; // Inisialisasi jumlah mesin
+$jumlahProsesPerUrutan = 16; // Ganti dengan jumlah proses per urutan yang Anda miliki
+
+$deliveryDate = Carbon::parse($produk->tengat_waktu);
+$tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+$tanggal = [];
+$processes = [];
+
+// Iterasi melalui proses per urutan
+for ($i = 0; $i < $jumlahProsesPerUrutan; $i++) {
+    $processColumnName = "process" . ($i + 1);
+
+    if (!empty($produk->$processColumnName)) {
+        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+        $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+        $processes[] = [
+            'step' => $i + 1, // Langkah ke-
+            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+        ];
+
+        // Menambah jumlah mesin jika proses tidak kosong
+        $jumlahMesin++;
+    }
+
+    $deliveryDate->subDays($jumlahMesin); // Mengurangkan satu hari dengan jumlah mesin
+}
+
+$tanggal[] = [
+    'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+];
+
+return Inertia::render('View', [
+    'viewProduct' => $produk,
+    'tanggalProcess' => $processes,
+    'jumlahMesin' => $jumlahMesin,
+    'tanggal' => $tanggal,
+]);
+```
+
+Dalam kode di atas, setiap kali Anda menemukan proses yang tidak kosong, Anda mengurangkan `$deliveryDate` dengan `$jumlahMesin` hari. Ini berarti setiap proses yang tidak kosong akan memiliki tanggal pengiriman yang berkurang seiring dengan penambahan jumlah mesin. Semoga ini membantu Anda mencapai hasil yang Anda inginkan.
+## Add half day
+Jika Anda ingin menggabungkan nilai yang telah diubah dari 0.5 hari (setengah hari) ke dalam pemanggilan `subDay()` yang telah Anda gunakan sebelumnya, Anda dapat melakukannya seperti ini:
+
+```php
+$nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
+
+$carbonDate = Carbon::now(); // Inisialisasi objek Carbon, bisa diganti dengan tanggal yang sesuai
+$carbonDate->addHours($nilaiNumerik * 24); // Menambahkan setengah hari (12 jam) ke objek Carbon
+
+$deliveryDate = Carbon::parse($produk->tengat_waktu);
+$tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+$processes = [];
+
+for ($i = 0; $i < 16; $i++) {
+    $processColumnName = "process" . ($i + 1);
+
+    if (!empty($produk->$processColumnName)) {
+        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+        $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+        // Menambahkan setengah hari ke tanggal per proses
+        $processDate->addHours($nilaiNumerik * 24);
+
+        $processes[] = [
+            'step' => $i + 1, // Langkah ke-
+            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+        ];
+    }
+
+    $deliveryDate->subDay(); // Mengurangkan satu hari
+}
+```
+
+Dalam kode di atas, kita menambahkan setengah hari ke tanggal per proses menggunakan `addHours()` setelah menghitung tanggal per proses seperti yang Anda lakukan sebelumnya. Pastikan untuk mengganti `$nilaiNumerik` dengan nilai yang sesuai jika Anda ingin mengonversi nilai yang berbeda menjadi setengah hari.
