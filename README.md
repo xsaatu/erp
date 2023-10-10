@@ -1,44 +1,78 @@
+## Refactoring to Model
+# Model
+// app/Models/Product.php
 
-## Add 2 proses tetap
-## cara ke 1
+namespace App\Models;
 
-// Menambahkan proses Quality dan Finish
-$processes[] = [
-  'step' => 0, // Proses Quality
-  'delivery_date' => $deliveryDate->copy()->subDay(2)->format('d-m-Y'),
-];
-        
-$processes[] = [
-  'step' => 17, // Proses Finish
-  'delivery_date' => $deliveryDate->copy()->subDay(1)->format('d-m-Y'),
-];
+use Illuminate\Database\Eloquent\Model;
 
-## Max date
-  $processDate = $deliveryDate->copy()->max($tanggalpesan);
+class Product extends Model
+{
+    protected $fillable = [
+        // Define your fillable fields here
+    ];
 
-## Take subday from est
-for ($i = 0; $i < 16; $i++) {
-    $processColumnName = "process" . ($i + 1);
-
-    if (!empty($produk->$processColumnName)) {
-        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
-        $processDate = $deliveryDate->copy()->max($tanggalpesan);
-
-        // Ambil estimasi untuk proses ini dari database
-        $estimasiColumnName = "estimasi_process" . ($i + 1);
-        $estimasi = $produk->$estimasiColumnName;
-
-        // Kurangkan tanggal proses dengan estimasi yang sesuai
-        $processDate->subDays($estimasi);
-
-        $processes[] = [
-            'step' => $i + 1, // Langkah ke-
-            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
-        ];
+    public static function createProduct($data)
+    {
+        // Create a new product using $data and save it
+        return self::create($data);
     }
 
-    $deliveryDate->subDay(); // Mengurangkan satu hari
+    public static function updateProduct($id, $data)
+    {
+        // Update the product with the given $id using $data
+        self::where('id', $id)->update($data);
+    }
+
+    public static function deleteProduct($id)
+    {
+        // Delete the product with the given $id
+        self::where('id', $id)->delete();
+    }
+
+    public static function searchProducts($search)
+    {
+        // Perform a search for products based on the search query
+        return self::where('so', 'LIKE', '%' . $search . '%')->get();
+    }
 }
+
+# Controller
+// app/Http/Controllers/ProductController.php
+
+use App\Models\Product;
+
+// ...
+
+public function store(Request $request)
+{
+    $data = $request->all();
+    Product::createProduct($data);
+    return redirect()->back()->with('message', 'Product has been added');
+}
+
+public function update(Request $request)
+{
+    $id = $request->id;
+    $data = $request->all();
+    Product::updateProduct($id, $data);
+    return redirect()->route('dashboard');
+}
+
+public function destroy(Request $request)
+{
+    $id = $request->id;
+    Product::deleteProduct($id);
+    return redirect()->back()->with('message', 'Product has been deleted');
+}
+
+public function search(Request $request)
+{
+    $search = $request->input('search');
+    $produk = Product::searchProducts($search);
+    return Inertia::render('Monitor', ['produk' => $produk]);
+}
+
 
 ## Convert
 Untuk mengonversi nilai 0.5 menjadi setengah hari dalam objek Carbon, Anda dapat menggunakan metode `addHours()` untuk menambahkan setengah hari (12 jam) ke objek Carbon. Berikut adalah contoh cara melakukannya:
