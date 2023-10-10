@@ -1,5 +1,5 @@
-## Refactoring to Model
-# Model
+# Refactoring to Model
+## Model
 // app/Models/Product.php
 
 namespace App\Models;
@@ -37,7 +37,7 @@ class Product extends Model
     }
 }
 
-# Controller
+## Controller
 // app/Http/Controllers/ProductController.php
 
 use App\Models\Product;
@@ -74,7 +74,7 @@ public function search(Request $request)
 }
 
 
-## Convert
+# Convert
 Untuk mengonversi nilai 0.5 menjadi setengah hari dalam objek Carbon, Anda dapat menggunakan metode `addHours()` untuk menambahkan setengah hari (12 jam) ke objek Carbon. Berikut adalah contoh cara melakukannya:
 
 ```php
@@ -87,7 +87,7 @@ echo $carbonDate->toDateTimeString(); // Output hasil konversi
 ```
 
 Dalam contoh di atas, kita mengalikan nilai numerik (0.5) dengan 24 untuk mengonversinya menjadi jam (setengah hari), lalu menggunakan `addHours()` untuk menambahkannya ke objek Carbon. Anda dapat mengganti `$carbonDate` dengan tanggal yang sesuai, dan hasilnya akan berisi tanggal dan waktu yang setengah hari lebih besar dari tanggal awal.
-## Try from est
+# Try from est
 ## 1
 $jumlahMesin = 3; // Ganti dengan jumlah mesin yang Anda miliki
 $jumlahProsesPerUrutan = 3; // Ganti dengan jumlah proses per urutan yang Anda miliki
