@@ -216,10 +216,13 @@ for ($i = 0; $i < 16; $i++) {
 Dalam kode di atas, kita menambahkan setengah hari ke tanggal per proses menggunakan `addHours()` setelah menghitung tanggal per proses seperti yang Anda lakukan sebelumnya. Pastikan untuk mengganti `$nilaiNumerik` dengan nilai yang sesuai jika Anda ingin mengonversi nilai yang berbeda menjadi setengah hari.
 
 # Ambil WT
+Jika Anda ingin menggunakan nilai `wait1` hingga `wait15` setelah `estimasi1`, `estimasi2`, dan seterusnya, Anda perlu mengorganisasi data Anda dengan benar dan memastikan Anda menyimpan nilai `wait` yang sesuai ke dalam variabel `data` sebelum mengirimnya ke database. Berikut adalah cara Anda dapat mengorganisasi kode Anda:
+
+```jsx
 const handleSubmit = () => {
   // Inisialisasi data dengan nilai awal
   const data = {
-    no,
+    so,
     name,
     tanggal_pesan,
     tengat_waktu,
@@ -246,7 +249,7 @@ const handleSubmit = () => {
   router.post('/product', data);
 
   // Reset semua nilai setelah mengirim data
-  setNo('');
+  setSo('');
   setName('');
   setTanggal_pesan('');
   setTengat_waktu('');
@@ -259,3 +262,5 @@ const handleSubmit = () => {
     setEstimasi(estimasiKey, '');
   }
 };
+```
+
