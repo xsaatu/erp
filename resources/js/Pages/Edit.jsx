@@ -8,7 +8,7 @@ export default function Edit(props) {
 
     console.log(props);
 
-    const [so, setSo] = useState(product.so);
+    const [no, setNo] = useState(product.no);
     const [name, setName] = useState(product.name);
     const [tanggal_pesan, setTanggal_pesan] = useState(product.tanggal_pesan);
     const [tengat_waktu, setTengat_waktu] = useState(product.tengat_waktu);
@@ -47,7 +47,7 @@ export default function Edit(props) {
     const handleSubmit = () => {
         const data = {
             id: product.id,
-            so, 
+            no, 
             name,
             tanggal_pesan,
             tengat_waktu,
@@ -69,7 +69,7 @@ export default function Edit(props) {
             est
         };
         router.post('/product/update', data);
-        setSo('')
+        setNo('')
         setName('')
         setTanggal_pesan('')
         setTengat_waktu('')
@@ -124,7 +124,7 @@ export default function Edit(props) {
                 <div className="container">
                     <div className="col">
                         <label><span className="block">Nomor Produk</span></label>
-                        <input type="text" placeholder="Nomor Produk" className="m-3 input w-full" onChange={(so) => setSo(so.target.value)} defaultValue={product.so} />
+                        <input type="text" placeholder="Nomor Produk" className="m-3 input w-full" onChange={(no) => setNo(no.target.value)} defaultValue={product.no} />
                         
                         <label><span className="block">Nama</span ></label>
                         <input type="text" placeholder="Nama" className="m-3 input w-full" onChange={(name) => setName(name.target.value)} defaultValue={product.name} />

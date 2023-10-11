@@ -47,40 +47,55 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = new Product();
-        $product->so = $request->so;
+        $product->no = $request->no;
         $product->name = $request->name;
         $product->tanggal_pesan = $request->tanggal_pesan;
         $product->tengat_waktu = $request->tengat_waktu;
         $product->process1 = $request->process1 ?? '';
         $product->estimasi1 = $request->estimasi1 ?? 0.00;
+        $product->wait1 = $request->wait1 ?? 0.00;
         $product->process2 = $request->process2 ?? '';
         $product->estimasi2 = $request->estimasi2 ?? 0.00;
+        $product->wait2 = $request->wait2?? 0.00;
         $product->process3 = $request->process3 ?? '';
         $product->estimasi3 = $request->estimasi3 ?? 0.00;
+        $product->wait3 = $request->wait3?? 0.00;
         $product->process4 = $request->process4 ?? '';
         $product->estimasi4 = $request->estimasi4 ?? 0.00;
+        $product->wait4 = $request->wait4?? 0.00;
         $product->process5 = $request->process5 ?? '';
         $product->estimasi5 = $request->estimasi5 ?? 0.00;
+        $product->wait5 = $request->wait5?? 0.00;
         $product->process6 = $request->process6 ?? '';
         $product->estimasi6 = $request->estimasi6 ?? 0.00;
+        $product->wait6 = $request->wait6?? 0.00;
         $product->process7 = $request->process7 ?? '';
         $product->estimasi7 = $request->estimasi7 ?? 0.00;
+        $product->wait7 = $request->wait7?? 0.00;
         $product->process8 = $request->process8 ?? '';
         $product->estimasi8 = $request->estimasi8 ?? 0.00;
+        $product->wait8 = $request->wait8?? 0.00;
         $product->process9 = $request->process9 ?? '';
         $product->estimasi9 = $request->estimasi9 ?? 0.00;
+        $product->wait9 = $request->wait9?? 0.00;
         $product->process10 = $request->process10 ?? '';
         $product->estimasi10 = $request->estimasi10 ?? 0.00;
+        $product->wait10 = $request->wait10?? 0.00;
         $product->process11 = $request->process11 ?? '';
         $product->estimasi11 = $request->estimasi11 ?? 0.00;
+        $product->wait11 = $request->wait11?? 0.00;
         $product->process12 = $request->process12 ?? '';
         $product->estimasi12 = $request->estimasi12 ?? 0.00;
+        $product->wait12 = $request->wait12?? 0.00;
         $product->process13 = $request->process13 ?? '';
         $product->estimasi13 = $request->estimasi13 ?? 0.00;
+        $product->wait13 = $request->wait13?? 0.00;
         $product->process14 = $request->process14 ?? '';
         $product->estimasi14 = $request->estimasi14 ?? 0.00;
+        $product->wait14 = $request->wait14?? 0.00;
         $product->process15 = $request->process15 ?? '';
         $product->estimasi15 = $request->estimasi15 ?? 0.00;
+        $product->wait15 = $request->wait15?? 0.00;
         $product->est = $request->est ?? 0.00;
         $product->save();
         return redirect()->back()->with('message', 'Product has been add');
@@ -118,7 +133,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         Product::where('id', $request->id)->update([
-            'so' => $request->so,
+            'no' => $request->no,
             'name' => $request->name,
             'tanggal_pesan' => $request->tanggal_pesan,
             'tengat_waktu' => $request->tengat_waktu,
@@ -184,7 +199,7 @@ class ProductController extends Controller
     public function search(Request $request) 
     {
         if($request->has('search')) {
-            $produk = Product::where('so','LIKE','%'.$request->search.'%')->get();
+            $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
         }
         return Inertia::render('Monitor', [
           'produk' => $produk,

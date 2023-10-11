@@ -64,9 +64,9 @@ export default function View(props) {
         <div id="head_product">
             <div className="container">
                 <div className="grid grid-cols-3 gap-3 m-5">
-                    <div><input className="input-xs" value={props.viewProduct.so} disabled></input></div>
+                    <div><input className="input-xs" value={props.viewProduct.no} disabled></input></div>
                     <div><input className="input-xs" value={tanggalPesan.tanggal_pesan} disabled></input></div>
-                    <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div>
+                    {/* <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div> */}
                 </div>
             </div>
         </div>
@@ -75,18 +75,19 @@ export default function View(props) {
             <table className="table table-md">
             <thead>
                 <tr>
-                <th>OP</th> 
+                <th>Number</th> 
                 <th>Process</th> 
                 <th>Estimasi</th> 
                 <th>Actual</th> 
                 <th>Tanggal Proses</th> 
-                <th>Step</th> 
+                <th>wait</th> 
                 </tr>
             </thead> 
             <tbody>
                 {nomorProses.map((nomor) => {
                 const processKey = `process${nomor}`;
                 const estimasiKey = `estimasi${nomor}`;
+                const waitKey = `wait${nomor}`;
                 const tanggalKey = tanggal.length - nomor;
 
                 // Cek apakah proses kosong
@@ -100,7 +101,7 @@ export default function View(props) {
                     <td>{produk[estimasiKey]}</td>
                     <td>Actual</td>
                     <td>{tanggal[tanggalKey]?.delivery_date}</td>
-                    <td>{tanggal[tanggalKey]?.step}</td>
+                    <td>{produk[waitKey]}</td>
                     </tr>
                 );
                 } else {

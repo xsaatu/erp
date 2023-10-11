@@ -15,7 +15,7 @@ const isSearch = (produk) => {
           <tbody>
           {produk.map((data, i) => {
             return <tr key={i}>
-                  <td>{data.so}</td>
+                  <td>{data.no}</td>
                   <td>{data.name}</td>
                   <td><Link href="edit"  data={{ id: data.id }} as="button" className="btn btn-info btn-xs text-white">Edit</Link></td>
                   <td><Link href="view" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">View</Link></td>
@@ -51,7 +51,7 @@ export default ProductSearch;
 //                 </tr>
 //                 return props.produk.map((data, i) => {
 //                     return <tr key={i}>
-//                         <td>{data.so}</td>
+//                         <td>{data.no}</td>
 //                         <td>{data.name}</td>
 //                         <td>{data.process}</td>
 //                         <td>{data.est}</td>

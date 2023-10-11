@@ -6,7 +6,7 @@ const isProduct = (product) => {
         </figure>
         <div className="card-body">
           <h2 className="card-title">
-            {data.so}
+            {data.no}
             <div className="badge badge-secondary">NEW</div>
           </h2>
           <p>{data.name}</p>

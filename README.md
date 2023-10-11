@@ -33,7 +33,7 @@ class Product extends Model
     public static function searchProducts($search)
     {
         // Perform a search for products based on the search query
-        return self::where('so', 'LIKE', '%' . $search . '%')->get();
+        return self::where('no', 'LIKE', '%' . $search . '%')->get();
     }
 }
 
@@ -214,3 +214,48 @@ for ($i = 0; $i < 16; $i++) {
 ```
 
 Dalam kode di atas, kita menambahkan setengah hari ke tanggal per proses menggunakan `addHours()` setelah menghitung tanggal per proses seperti yang Anda lakukan sebelumnya. Pastikan untuk mengganti `$nilaiNumerik` dengan nilai yang sesuai jika Anda ingin mengonversi nilai yang berbeda menjadi setengah hari.
+
+# Ambil WT
+const handleSubmit = () => {
+  // Inisialisasi data dengan nilai awal
+  const data = {
+    no,
+    name,
+    tanggal_pesan,
+    tengat_waktu,
+  };
+
+  // Loop melalui process1 hingga process15 dan estimasi1 hingga estimasi15
+  for (let i = 1; i <= 15; i++) {
+    const processKey = `process${i}`;
+    const estimasiKey = `estimasi${i}`;
+    const waitKey = `wait${i}`;
+
+    // Temukan nilai wait yang sesuai berdasarkan opsi yang dipilih
+    const selectedMachine = machine.find((mesin) => mesin.nama === data[processKey]);
+    if (selectedMachine) {
+      data[waitKey] = selectedMachine.wait;
+    }
+
+    // Tambahkan estimasi ke dalam data
+    data[estimasiKey] = data[estimasiKey];
+  }
+
+  // ... Sisanya sama seperti sebelumnya
+
+  router.post('/product', data);
+
+  // Reset semua nilai setelah mengirim data
+  setNo('');
+  setName('');
+  setTanggal_pesan('');
+  setTengat_waktu('');
+
+  // Reset process1 hingga process15 dan estimasi1 hingga estimasi15
+  for (let i = 1; i <= 15; i++) {
+    const processKey = `process${i}`;
+    const estimasiKey = `estimasi${i}`;
+    setProcess(processKey, '');
+    setEstimasi(estimasiKey, '');
+  }
+};

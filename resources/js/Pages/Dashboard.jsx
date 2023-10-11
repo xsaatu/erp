@@ -6,17 +6,17 @@ import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Dashboard(props) {
-    // const [so, setSo] = useState('');
+    // const [no, setNo] = useState('');
     // const [name, setName] = useState('');
     // const [process, setProcess] = useState('');
     // const [est, setEst] = useState('');
 
     // const handleSubmit = () => {
     //     const data = {
-    //         so, name, process, est
+    //         no, name, process, est
     //     };
     //     router.post('/product', data);
-    //     setSo('')
+    //     setNo('')
     //     setName('')
     //     setProcess('')
     //     setEst('')
