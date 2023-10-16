@@ -211,27 +211,37 @@ class ProductController extends Controller
         $produk = $product->find($request->id);
         $deliveryDate = Carbon::parse($produk->tengat_waktu);
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+        $nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
+
 
             $tanggal = [];
             $processes = [];
  
+        $finish = array_column($produk, 'nama');
+        $hasFinish = in_array('finish', $finish);
+        $processes[] = [
+            $hasFinish ? true : $deliveryDate->subDay(),
+        ];
 
                 // Menghitung tanggal di setiap prosesnya
                 for ($i = 0; $i < 16; $i++) {
                     $processColumnName = "process" . ($i + 1);
-
+                
                     if (!empty($produk->$processColumnName)) {
                         // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
                         $processDate = $deliveryDate->copy()->max($tanggalpesan);
-                        
+                
+                        // Menambahkan setengah hari ke tanggal per proses
+                        $processDate->addHours($nilaiNumerik * 24);
+                
                         $processes[] = [
                             'step' => $i + 1, // Langkah ke-
                             'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
                         ];
                     }
-
+                
                     $deliveryDate->subDay(); // Mengurangkan satu hari
-                }
+                }                
 
             $tanggal[] = [
                 'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
@@ -298,6 +308,22 @@ class ProductController extends Controller
             //         'step_name' => $processName, // Nama proses
             //         'delivery_date' => $stepDate->format('d-m-Y'), // Format tanggal
             //     ];
+
+            //     $deliveryDate->subDay(); // Mengurangkan satu hari
+            // }
+
+            // for ($i = 0; $i < 16; $i++) {
+            //     $processColumnName = "process" . ($i + 1);
+
+            //     if (!empty($produk->$processColumnName)) {
+            //         // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+            //         $processDate = $deliveryDate->copy()->max($tanggalpesan);
+                    
+            //         $processes[] = [
+            //             'step' => $i + 1, // Langkah ke-
+            //             'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+            //         ];
+            //     }
 
             //     $deliveryDate->subDay(); // Mengurangkan satu hari
             // }

@@ -264,3 +264,176 @@ const handleSubmit = () => {
 };
 ```
 
+# refactor for view
+
+```
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
+class Product extends Model
+{
+    // ...
+
+    public function getProcessDates()
+    {
+        $deliveryDate = Carbon::parse($this->tengat_waktu);
+        $tanggalpesan = Carbon::parse($this->tanggal_pesan);
+        $processes = [];
+
+        // Menghitung tanggal di setiap prosesnya
+        for ($i = 0; $i < 16; $i++) {
+            $processColumnName = "process" . ($i + 1);
+
+            if (!empty($this->$processColumnName)) {
+                // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+                $processDate = $deliveryDate->copy()->max($tanggalpesan);
+
+                $processes[] = [
+                    'step' => $i + 1, // Langkah ke-
+                    'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
+                ];
+            }
+
+            $deliveryDate->subDay(); // Mengurangkan satu hari
+        }
+
+        return $processes;
+    }
+
+    public function getTanggalPesan()
+    {
+        return Carbon::parse($this->tanggal_pesan)->format('d-m-Y');
+    }
+}
+```
+Controller
+```
+public function view(Product $product, Request $request)
+{
+    $produk = $product->find($request->id);
+
+    // Mengambil data tanggal proses dan tanggal pemesanan dari model
+    $processes = $produk->getProcessDates();
+    $tanggal = $produk->getTanggalPesan();
+
+    return Inertia::render('View', [
+        'viewProduct' => $produk,
+        'tanggalProcess' => $processes,
+        'tanggal' => $tanggal,
+    ]);
+}
+```
+
+# refactor for edit and update
+Request
+```
+// app/Http/Requests/ProductUpdateRequest.php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ProductUpdateRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return true;
+    }
+
+    public function rules()
+    {
+        return [
+            'no' => 'required',
+            'name' => 'required',
+            'tanggal_pesan' => 'required|date',
+            'tengat_waktu' => 'required|date',
+            'process1' => 'nullable',
+            'estimasi1' => 'nullable|numeric',
+            'process2' => 'nullable',
+            'estimasi2' => 'nullable|numeric',
+            'process3' => 'nullable',
+            'estimasi3' => 'nullable|numeric',
+            'process4' => 'nullable',
+            'estimasi4' => 'nullable|numeric',
+            'process5' => 'nullable',
+            'estimasi5' => 'nullable|numeric',
+            'process6' => 'nullable',
+            'estimasi6' => 'nullable|numeric',
+            'process7' => 'nullable',
+            'estimasi7' => 'nullable|numeric',
+            'process8' => 'nullable',
+            'estimasi8' => 'nullable|numeric',
+            'process9' => 'nullable',
+            'estimasi9' => 'nullable|numeric',
+            'process10' => 'nullable',
+            'estimasi10' => 'nullable|numeric',
+            'process11' => 'nullable',
+            'estimasi11' => 'nullable|numeric',
+            'process12' => 'nullable',
+            'estimasi12' => 'nullable|numeric',
+            'process13' => 'nullable',
+            'estimasi13' => 'nullable|numeric',
+            'process14' => 'nullable',
+            'estimasi14' => 'nullable|numeric',
+            'process15' => 'nullable',
+            'estimasi15' => 'nullable|numeric',
+            'est' => 'nullable',
+        ];
+    }
+}
+```
+
+```model
+// app/Models/Product.php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    // ...
+
+    public function updateProduct(array $data)
+    {
+        return $this->update($data);
+    }
+}
+```
+
+```controller
+// app/Http/Controllers/ProductController.php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Product;
+use App\Http\Resources\MachineCollection;
+
+class ProductController extends Controller
+{
+    public function edit(Product $product, Request $request)
+    {
+        $produk = $product->find($request->id);
+        $machine = new MachineCollection(Machine::OrderByDesc('id')->paginate(8));
+        return Inertia::render('Edit', [
+            'myProduct' => $produk,
+            'myMachine' => $machine,
+        ]);
+    }
+
+    public function update(ProductUpdateRequest $request, Product $product)
+    {
+        $data = $request->validated();
+        $product->find($request->id)->updateProduct($data);
+        
+        return redirect()->route('dashboard');
+    }
+}
+```
+
+#format
+->timestamp
+->j F Y
