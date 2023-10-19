@@ -1,8 +1,38 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
-export default function AddData(props) {
+const Select = ({ options, value, onChange }) => {
+    const [searchTerm, setSearchTerm] = useState('');
 
+    const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    };
+
+    const filteredOptions = state.options.filter((option) =>
+    option.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return (
+    <div>
+        <input
+        type="text"
+        placeholder="Cari opsi..."
+        value={searchTerm}
+        onChange={handleSearch}
+        />
+        <select value={value} onChange={onChange}>
+        {filteredOptions.map((option, index) => (
+            <option key={index} value={option}>
+            {option}
+            </option>
+        ))}
+        </select>
+    </div>
+    );
+};
+export default function AddData(props) {
+    const machine = props.machine.data;
+    const machineOptions = machine.map((mesin) => mesin.nama);
     const [no, setNo] = useState('');
     const [name, setName] = useState('');
     const [tanggal_pesan, setTanggal_pesan] = useState('');
@@ -54,67 +84,7 @@ export default function AddData(props) {
     const [wait15, setWait15] = useState('');
     const [est, setEst] = useState('');
 
-    // const handleSubmit = () => {
-    //     const data = {
-    //         no, 
-    //         name,
-    //         tanggal_pesan,
-    //         tengat_waktu,
-    //         process1, estimasi1, 
-    //         process2, estimasi2, 
-    //         process3, estimasi3, 
-    //         process4, estimasi4, 
-    //         process5, estimasi5, 
-    //         process6, estimasi6, 
-    //         process7, estimasi7, 
-    //         process8, estimasi8, 
-    //         process9, estimasi9, 
-    //         process10, estimasi10, 
-    //         process11, estimasi11, 
-    //         process12, estimasi12, 
-    //         process13, estimasi13, 
-    //         process14, estimasi14, 
-    //         process15, estimasi15, 
-    //         est
-    //     };
-    //     router.post('/product', data);
-    //     seNo('')
-    //     setName('')
-    //     setTanggal_pesan('')
-    //     setTengat_waktu('')
-    //     setProcess1('')
-    //     setEstimasi1('')
-    //     setProcess2('')
-    //     setEstimasi2('')
-    //     setProcess3('')
-    //     setEstimasi3('')
-    //     setProcess4('')
-    //     setEstimasi4('')
-    //     setProcess5('')
-    //     setEstimasi5('')
-    //     setProcess6('')
-    //     setEstimasi6('')
-    //     setProcess7('')
-    //     setEstimasi7('')
-    //     setProcess8('')
-    //     setEstimasi8('')
-    //     setProcess9('')
-    //     setEstimasi9('')
-    //     setProcess10('')
-    //     setEstimasi10('')
-    //     setProcess11('')
-    //     setEstimasi11('')
-    //     setProcess12('')
-    //     setEstimasi12('')
-    //     setProcess13('')
-    //     setEstimasi13('')
-    //     setProcess14('')
-    //     setEstimasi14('')
-    //     setProcess15('')
-    //     setEstimasi15('')
-    //     setEst('')
-    // };
-    const machine = props.machine.data;
+
 
     const handleSubmit = () => {
         // Inisialisasi data dengan nilai awal
@@ -177,16 +147,22 @@ export default function AddData(props) {
       };
 
 
-
     // console.log(machine);
-    const Select = ({dvalue, change}) => {
-        return <select className="select w-full max-w-xs shadow-md" defaultValue={dvalue} onChange={(dvalue) => change(dvalue.target.value)}>
-        <option selected></option>
-            {machine.map((mesin, i) => (
-                <option key={i} value={mesin.nama}>{mesin.nama}</option>
-            ))}
-        </select>
-    }
+    // const Select = ({dvalue, change}) => {
+    //     return <select className="select w-full max-w-xs shadow-md" defaultValue={dvalue} onChange={(dvalue) => change(dvalue.target.value)}>
+    //     {/* <option selected></option>
+    //         {machine.map((mesin, i) => (
+    //             <option key={i} value={mesin.nama}>{mesin.nama}</option>
+    //         ))} */}
+    //         {filteredOptions.map((option, index) => (
+    //       <option key={index} value={option}>
+    //         {option}
+    //       </option>
+    //     ))}
+    //     </select>
+    // }
+    
+    
 
 
     return (
@@ -208,7 +184,7 @@ export default function AddData(props) {
                     <input type="date" className="m-3 input w-full" onChange={(tengat_waktu) => setTengat_waktu(tengat_waktu.target.value)}/>
                     
                     <label><span className="block">Proses 1</span></label>
-                    <Select dvalue={process1} change={setProcess1}/>
+                    <Select options={machineOptions} dvalue={process1} change={setProcess1}/>
                     <input type="number" placeholder="Estimasi 1" className="m-3 input w-full" onChange={(estimasi1) => setEstimasi1(estimasi1.target.value)} value={estimasi1} />
                     
                     <label><span className="block">Proses 2</span></label>

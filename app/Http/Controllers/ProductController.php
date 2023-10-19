@@ -215,13 +215,13 @@ class ProductController extends Controller
 
 
             $tanggal = [];
-            $processes = [];
+            $processes = session('delivery_date', []);
  
-        $finish = array_column($produk, 'nama');
-        $hasFinish = in_array('finish', $finish);
-        $processes[] = [
-            $hasFinish ? true : $deliveryDate->subDay(),
-        ];
+        // $finish = array_column($produk, 'nama');
+        // $hasFinish = in_array('finish', $finish);
+        // $processes[] = [
+        //     $hasFinish ? true : $deliveryDate->subDay(),
+        // ];
 
                 // Menghitung tanggal di setiap prosesnya
                 for ($i = 0; $i < 16; $i++) {
@@ -232,12 +232,14 @@ class ProductController extends Controller
                         $processDate = $deliveryDate->copy()->max($tanggalpesan);
                 
                         // Menambahkan setengah hari ke tanggal per proses
-                        $processDate->addHours($nilaiNumerik * 24);
+                        $processDate->subHours($nilaiNumerik * 24);
                 
                         $processes[] = [
                             'step' => $i + 1, // Langkah ke-
                             'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
                         ];
+
+                        session(['delivery_date' => $processes]);
                     }
                 
                     $deliveryDate->subDay(); // Mengurangkan satu hari
