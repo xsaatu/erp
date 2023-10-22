@@ -36,4 +36,38 @@ class Product extends Model
         return $this->hasOne(Product::class, 'machine');
     }
 
+    public function getView($tanggalpesan)
+    {
+        $deliveryDate = Carbon::parse($this->tengat_waktu);
+
+        $proceses = [];
+
+        $finish = array_column($proceses, 'nama');
+        $hasFinish = in_array('finish', $finish);
+        $proceses[] = [
+            $hasFinish ? true : $deliveryDate->subDay()
+        ];
+        
+        // Menghitung tanggal di setiap prosesnya
+        for ($i = 0; $i < 16; $i++) {
+            $processColumnName = "process" . ($i + 1);
+            $wt = $this->wait . ($i + 1);
+                
+            if (!empty($this->$processColumnName)) {
+                // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
+                $processDate = $deliveryDate->copy()->max($tanggalpesan);
+                
+                // Menambahkan setengah hari ke tanggal per proses
+                $processDate->subHour((double)$wt * 24)->toDateTimeString();
+                
+                $proceses[] = [
+                    'step' => $i + 1, // Langkah ke-
+                    'delivery_date' => $processDate->format('d-m-Y H:i:s'), // Format tanggal
+                ];
+            }
+                
+                    // $deliveryDate->subDay(); // Mengurangkan satu hari
+        } 
+        return $proceses;
+    }
 }

@@ -54,48 +54,63 @@ class ProductController extends Controller
         $product->process1 = $request->process1 ?? '';
         $product->estimasi1 = $request->estimasi1 ?? 0.00;
         $product->wait1 = $request->wait1 ?? 0.00;
+
         $product->process2 = $request->process2 ?? '';
         $product->estimasi2 = $request->estimasi2 ?? 0.00;
         $product->wait2 = $request->wait2?? 0.00;
+
         $product->process3 = $request->process3 ?? '';
         $product->estimasi3 = $request->estimasi3 ?? 0.00;
         $product->wait3 = $request->wait3?? 0.00;
+
         $product->process4 = $request->process4 ?? '';
         $product->estimasi4 = $request->estimasi4 ?? 0.00;
         $product->wait4 = $request->wait4?? 0.00;
+
         $product->process5 = $request->process5 ?? '';
         $product->estimasi5 = $request->estimasi5 ?? 0.00;
         $product->wait5 = $request->wait5?? 0.00;
+
         $product->process6 = $request->process6 ?? '';
         $product->estimasi6 = $request->estimasi6 ?? 0.00;
         $product->wait6 = $request->wait6?? 0.00;
+
         $product->process7 = $request->process7 ?? '';
         $product->estimasi7 = $request->estimasi7 ?? 0.00;
         $product->wait7 = $request->wait7?? 0.00;
+
         $product->process8 = $request->process8 ?? '';
         $product->estimasi8 = $request->estimasi8 ?? 0.00;
         $product->wait8 = $request->wait8?? 0.00;
+
         $product->process9 = $request->process9 ?? '';
         $product->estimasi9 = $request->estimasi9 ?? 0.00;
         $product->wait9 = $request->wait9?? 0.00;
+
         $product->process10 = $request->process10 ?? '';
         $product->estimasi10 = $request->estimasi10 ?? 0.00;
         $product->wait10 = $request->wait10?? 0.00;
+
         $product->process11 = $request->process11 ?? '';
         $product->estimasi11 = $request->estimasi11 ?? 0.00;
         $product->wait11 = $request->wait11?? 0.00;
+
         $product->process12 = $request->process12 ?? '';
         $product->estimasi12 = $request->estimasi12 ?? 0.00;
         $product->wait12 = $request->wait12?? 0.00;
+
         $product->process13 = $request->process13 ?? '';
         $product->estimasi13 = $request->estimasi13 ?? 0.00;
         $product->wait13 = $request->wait13?? 0.00;
+
         $product->process14 = $request->process14 ?? '';
         $product->estimasi14 = $request->estimasi14 ?? 0.00;
         $product->wait14 = $request->wait14?? 0.00;
+
         $product->process15 = $request->process15 ?? '';
         $product->estimasi15 = $request->estimasi15 ?? 0.00;
         $product->wait15 = $request->wait15?? 0.00;
+
         $product->est = $request->est ?? 0.00;
         $product->save();
         return redirect()->back()->with('message', 'Product has been add');
@@ -209,49 +224,22 @@ class ProductController extends Controller
     public function view(Product $product, Request $request)
     {
         $produk = $product->find($request->id);
-        $deliveryDate = Carbon::parse($produk->tengat_waktu);
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
         $nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
 
 
             $tanggal = [];
-            $processes = session('delivery_date', []);
- 
-        // $finish = array_column($produk, 'nama');
-        // $hasFinish = in_array('finish', $finish);
-        // $processes[] = [
-        //     $hasFinish ? true : $deliveryDate->subDay(),
-        // ];
-
-                // Menghitung tanggal di setiap prosesnya
-                for ($i = 0; $i < 16; $i++) {
-                    $processColumnName = "process" . ($i + 1);
-                
-                    if (!empty($produk->$processColumnName)) {
-                        // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
-                        $processDate = $deliveryDate->copy()->max($tanggalpesan);
-                
-                        // Menambahkan setengah hari ke tanggal per proses
-                        $processDate->subHours($nilaiNumerik * 24);
-                
-                        $processes[] = [
-                            'step' => $i + 1, // Langkah ke-
-                            'delivery_date' => $processDate->format('d-m-Y'), // Format tanggal
-                        ];
-
-                        session(['delivery_date' => $processes]);
-                    }
-                
-                    $deliveryDate->subDay(); // Mengurangkan satu hari
-                }                
+               
 
             $tanggal[] = [
                 'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
             ];
 
-        return Inertia::render('View', [
+        $proceses = $produk->getView($tanggalpesan);
+
+        return Inertia::render('/product/search', [
             'viewProduct' => $produk,
-            'tanggalProcess' => $processes,
+            'tanggalProcess' => $proceses,
             'tanggal' => $tanggal,
         ]);
     }

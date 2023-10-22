@@ -1,38 +1,38 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
-const Select = ({ options, value, onChange }) => {
-    const [searchTerm, setSearchTerm] = useState('');
+// const Select = ({ options, value, onChange }) => {
+//     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    };
+//     const handleSearch = (e) => {
+//     setSearchTerm(e.target.value);
+//     };
 
-    const filteredOptions = state.options.filter((option) =>
-    option.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+//     const filteredOptions = state.options.filter((option) =>
+//     option.toLowerCase().includes(searchTerm.toLowerCase())
+//     );
 
-    return (
-    <div>
-        <input
-        type="text"
-        placeholder="Cari opsi..."
-        value={searchTerm}
-        onChange={handleSearch}
-        />
-        <select value={value} onChange={onChange}>
-        {filteredOptions.map((option, index) => (
-            <option key={index} value={option}>
-            {option}
-            </option>
-        ))}
-        </select>
-    </div>
-    );
-};
+//     return (
+//     <div>
+//         <input
+//         type="text"
+//         placeholder="Cari opsi..."
+//         value={searchTerm}
+//         onChange={handleSearch}
+//         />
+//         <select value={value} onChange={onChange}>
+//         {filteredOptions.map((option, index) => (
+//             <option key={index} value={option}>
+//             {option}
+//             </option>
+//         ))}
+//         </select>
+//     </div>
+//     );
+// };
 export default function AddData(props) {
     const machine = props.machine.data;
-    const machineOptions = machine.map((mesin) => mesin.nama);
+    // const machineOptions = machine.map((mesin) => mesin.nama);
     const [no, setNo] = useState('');
     const [name, setName] = useState('');
     const [tanggal_pesan, setTanggal_pesan] = useState('');
@@ -89,7 +89,7 @@ export default function AddData(props) {
     const handleSubmit = () => {
         // Inisialisasi data dengan nilai awal
         const data = {
-        no,
+            no,
           name,
           tanggal_pesan,
           tengat_waktu,
@@ -148,19 +148,14 @@ export default function AddData(props) {
 
 
     // console.log(machine);
-    // const Select = ({dvalue, change}) => {
-    //     return <select className="select w-full max-w-xs shadow-md" defaultValue={dvalue} onChange={(dvalue) => change(dvalue.target.value)}>
-    //     {/* <option selected></option>
-    //         {machine.map((mesin, i) => (
-    //             <option key={i} value={mesin.nama}>{mesin.nama}</option>
-    //         ))} */}
-    //         {filteredOptions.map((option, index) => (
-    //       <option key={index} value={option}>
-    //         {option}
-    //       </option>
-    //     ))}
-    //     </select>
-    // }
+    const Select = ({dvalue, change}) => {
+        return <select className="select w-full max-w-xs shadow-md" defaultValue={dvalue} onChange={(dvalue) => change(dvalue.target.value)}>
+        <option selected></option>
+            {machine.map((mesin, i) => (
+                <option key={i} value={mesin.nama}>{mesin.nama}</option>
+            ))}
+        </select>
+    }
     
     
 
@@ -184,7 +179,7 @@ export default function AddData(props) {
                     <input type="date" className="m-3 input w-full" onChange={(tengat_waktu) => setTengat_waktu(tengat_waktu.target.value)}/>
                     
                     <label><span className="block">Proses 1</span></label>
-                    <Select options={machineOptions} dvalue={process1} change={setProcess1}/>
+                    <Select dvalue={process1} change={setProcess1}/>
                     <input type="number" placeholder="Estimasi 1" className="m-3 input w-full" onChange={(estimasi1) => setEstimasi1(estimasi1.target.value)} value={estimasi1} />
                     
                     <label><span className="block">Proses 2</span></label>
