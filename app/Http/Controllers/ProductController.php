@@ -23,10 +23,11 @@ class ProductController extends Controller
         return Inertia::render('Auth/Login', [
             ]);
     }
-    public function index()
+    public function index(Request $request, $search = null)
     {
 
         $product = new ProductCollection(Product::OrderByDesc('id')->paginate(8));
+
         return Inertia::render('Monitor', [
             'product' => $product,
             ]);
@@ -217,16 +218,21 @@ class ProductController extends Controller
             $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
         }
         return Inertia::render('Monitor', [
-          'produk' => $produk,
+          'product' => $produk,
         ]);
+
+        // $searchTerm = $request->get($request->search);
+        // $results = Product::where('no', 'LIKE', '%' . $searchTerm . '%')->get();
+        
+        // return Inertia::render('Monitor', [
+        //     'produk' => $results,
+        // ]);
     }
 
     public function view(Product $product, Request $request)
     {
-        $produk = $product->find($request->id);
+        dd($produk = $product->find($request->id));
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
-        $nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
-
 
             $tanggal = [];
                
@@ -237,12 +243,37 @@ class ProductController extends Controller
 
         $proceses = $produk->getView($tanggalpesan);
 
-        return Inertia::render('/product/search', [
+        return Inertia::render('Monitor', [
             'viewProduct' => $produk,
             'tanggalProcess' => $proceses,
             'tanggal' => $tanggal,
         ]);
     }
+
+    public function searchAndView(Product $product, Request $request) {
+        // if($request->has('search')) {
+        //     $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
+        // }
+
+        dd($produk = $product->find($request->id));
+        $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+            $tanggal = [];
+               
+
+            $tanggal[] = [
+                'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+            ];
+
+        $proceses = $produk->getView($tanggalpesan);
+
+        return Inertia::render('/monitor/search', [
+            'viewProduct' => $produk,
+            'tanggalProcess' => $proceses,
+            'tanggal' => $tanggal,
+        ]);
+    }
+
 }
 
             // PROSES ASLINYA

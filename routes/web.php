@@ -19,20 +19,29 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [ProductController::class, 'login']);
-Route::post('/product', [ProductController::class, 'store']);
-Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
+Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/edit', [ProductController::class, 'edit'], [MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('edit.product');
+
+Route::prefix('monitor')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
+    Route::get('/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
+    Route::get('/view', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
+    
+});
+
+// Route::prefix('monitor')->group(function () {
+//     Route::get('/', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
+    
+//     Route::match(['get', 'post'], '/search', [ProductController::class, 'searchAndView'])->middleware(['auth', 'verified'])->name('searchAndView.product');
+// });
+
+
+
+Route::post('/product', [ProductController::class, 'store']);
 Route::post('/product/update', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update.product');
-Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
-Route::get('/product/search', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
-
-Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::get('/machine', [ProductController::class, 'select']);
-
-Route::post('/machine', [MachineController::class, 'store']);
 Route::post('/product/delete', [ProductController::class, 'destroy'])->middleware(['auth', 'verified'])->name('delete.product');
+Route::post('/machine', [MachineController::class, 'store']);
 
 // Route::get('/product', [ProductController::class, 'index']);
 
