@@ -9,6 +9,7 @@ use App\Models\Machine;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use PDF;
 
 use function GuzzleHttp\Promise\all;
 
@@ -235,13 +236,22 @@ class ProductController extends Controller
                 'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
             ];
 
-        $proceses = $produk->getView($tanggalpesan);
+        $proceses = $product->getView($tanggalpesan, $produk);
 
-        return Inertia::render('/product/search', [
+        return Inertia::render('View', [
             'viewProduct' => $produk,
             'tanggalProcess' => $proceses,
             'tanggal' => $tanggal,
         ]);
+    }
+
+    public function downloadPDF (Product $product, Request $request) 
+    {
+        $produk = $product->find($request->id);
+        $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+
+        $pdf = PDF::loadview('ViewPdf', ['produk' => $produk, $tanggalpesan]);
+        return $pdf->download('product-report.pdf');
     }
 }
 

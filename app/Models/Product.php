@@ -36,9 +36,9 @@ class Product extends Model
         return $this->hasOne(Product::class, 'machine');
     }
 
-    public function getView($tanggalpesan)
+    public function getView($tanggalpesan, $produk)
     {
-        $deliveryDate = Carbon::parse($this->tengat_waktu);
+        $deliveryDate = Carbon::parse($produk->tengat_waktu);
 
         $proceses = [];
 
@@ -51,9 +51,9 @@ class Product extends Model
         // Menghitung tanggal di setiap prosesnya
         for ($i = 0; $i < 16; $i++) {
             $processColumnName = "process" . ($i + 1);
-            $wt = $this->wait . ($i + 1);
+            $wt = $produk->wait . ($i + 1);
                 
-            if (!empty($this->$processColumnName)) {
+            if (!empty($produk->$processColumnName)) {
                 // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
                 $processDate = $deliveryDate->copy()->max($tanggalpesan);
                 
@@ -62,7 +62,7 @@ class Product extends Model
                 
                 $proceses[] = [
                     'step' => $i + 1, // Langkah ke-
-                    'delivery_date' => $processDate->format('d-m-Y H:i:s'), // Format tanggal
+                    'delivery_date' => $processDate->format('d-m-Y H:i'), // Format tanggal
                 ];
             }
                 

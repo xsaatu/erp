@@ -12,7 +12,7 @@ export default function View(props) {
     // Render 3
     const nomorProses = Array.from({ length: 15 }, (_, index) => index + 1);
 
-    console.log(props);
+    // console.log(props);
     return <>
 
         <Navbar />

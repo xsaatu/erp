@@ -10,6 +10,7 @@ const isSearch = (produk) => {
               <th>Action</th>
               <th>Action</th>
               <th>Action</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -17,9 +18,10 @@ const isSearch = (produk) => {
             return <tr key={i}>
                   <td>{data.no}</td>
                   <td>{data.name}</td>
-                  {/* <td><Link href="edit"  data={{ id: data.id }} as="button" className="btn btn-info btn-xs text-white">Edit</Link></td> */}
+                  <td><Link href="edit"  data={{ id: data.id }} as="button" className="btn btn-info btn-xs text-white">Edit</Link></td>
                   <td><Link href="view" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">View</Link></td>
-                  {/* <td><Link href="delete" data={{id: data.id}} method="post" as="button" className="btn btn-error btn-xs text-white">Delete</Link></td> */}
+                  <td><Link href="delete" data={{id: data.id}} method="post" as="button" className="btn btn-error btn-xs text-white">Delete</Link></td>
+                  <td><Link href="/product/download_pdf" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">Download</Link></td>
                 </tr>
            })}
 

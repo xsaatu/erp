@@ -35,7 +35,7 @@ export default function Monitor(props) {
 
     const Find = (props) => {
     
-        // console.log(props.produk)
+        console.log(props)
         return <div className="container grid grid-cols-3">
             <div className="col">
                 <div className="mt-5 mx-auto sm:px-6 lg:px-4">
@@ -88,15 +88,17 @@ export default function Monitor(props) {
         >
         <Head title="Monitor"/>
 
-        <Find produk={props.produk[0]}/>
+        <Find produk={props.produk}/>
 
         <div className='flex justify-center flex-col lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4'>
             {/* <ProductLists product={props.product.data} /> */}
-            <div className="tab-content">
+            <ProductSearch produk={props.produk}/>
+
+            {/* <div className="tab-content">
                 {selectedTab === 'general' && <GeneralTabContent />}
                 {selectedTab === 'view' && <ViewTabContent />}
                 {selectedTab === 'machine' && <MachineTabContent />}
-            </div>
+            </div> */}
         </div>
             </AuthenticatedLayout>
         </>
