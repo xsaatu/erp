@@ -28,7 +28,7 @@ class Product extends Model
     'process13', 'estimasi13', 
     'process14', 'estimasi14', 
     'process15', 'estimasi15', 
-    'est'
+    'est', 'tengat_waktu'
     ];
     
     public function product()

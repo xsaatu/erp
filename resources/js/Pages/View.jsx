@@ -1,7 +1,7 @@
 import Navbar from "@/Components/Navbar";
+import { Link } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 
 export default function View(props) {
     
@@ -26,6 +26,8 @@ export default function View(props) {
                 </div>
             </div>
         </div>
+
+
 
         <div className="overflow-x-auto m-5">
             <table className="table table-md">

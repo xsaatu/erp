@@ -26,7 +26,7 @@ Route::get('/product/edit', [ProductController::class, 'edit'], [MachineContorll
 Route::post('/product/update', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/view', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
-Route::get('/product/download_pdf', [ProductController::class, 'downloadPDF'])->name('download.product');
+Route::get('/product/productpdf', [ProductController::class, 'productPDF'], [ProductController::class, 'search'])->name('download.product');
 
 Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 

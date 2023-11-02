@@ -214,11 +214,34 @@ class ProductController extends Controller
     // seacrh
     public function search(Request $request) 
     {
-        if($request->has('search')) {
-            $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
+        // $produk = [];
+
+        // if($request->has('search')) {
+        //     $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
+        // }
+        // // $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
+        // return Inertia::render('Monitor', [
+        //   'produk' => $produk,
+        // ]);
+
+
+        // cara 2
+        if ($request->has('search')) {
+            $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
+    
+            if ($request->has('download_pdf')) {
+                // Jika pengguna ingin mengunduh PDF, maka buat dan kirim PDF sebagai respons
+                $pdf = PDF::loadview('ViewPdf', ['product' => $produk]);
+                return $pdf->stream();
+            }
+    
+            return Inertia::render('Monitor', [
+                'produk' => $produk,
+            ]);
         }
+
         return Inertia::render('Monitor', [
-          'produk' => $produk,
+            'produk' => [],
         ]);
     }
 
@@ -245,14 +268,20 @@ class ProductController extends Controller
         ]);
     }
 
-    public function downloadPDF (Product $product, Request $request) 
-    {
-        $produk = $product->find($request->id);
-        $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
-
-        $pdf = PDF::loadview('ViewPdf', ['produk' => $produk, $tanggalpesan]);
-        return $pdf->download('product-report.pdf');
-    }
+    // public function productPDF(Request $request) 
+    // {
+    //     $produk = $request->get('produk');
+    //     if ($produk) {
+    //         $pdf = PDF::loadview('ViewPdf', [
+    //             'produk' => $produk,
+    //         ]);
+    //         return $pdf->stream();
+    //     } else {
+    //         // Tindakan yang akan diambil jika $produk bernilai null atau bukan array
+    //         // Misalnya, mungkin Anda ingin mengembalikan pesan kesalahan.
+    //         return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
+    //     }
+    // }
 }
 
             // PROSES ASLINYA

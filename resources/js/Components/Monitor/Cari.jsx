@@ -1,13 +1,21 @@
 import { Link } from "@inertiajs/react"
 
-const isSearch = (produk) => {
+const isSearch = (produk, searchQuery) => {
     return <div className="overflow-x-auto">
+        <div>
+        <a
+          href={`/product/search?search=${searchQuery}&download_pdf=1`} // Menambahkan parameter download_pdf
+          target="_blank"
+          as="button"
+          className="btn btn-info btn-xs text-white"
+        >Download</a>
+          {/* <a href="/product/productpdf" target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+        </div>
       <table className="table table-zebra">
           <thead>
             <tr>
               <th>ID Product</th>
               <th>Nama</th>
-              <th>Action</th>
               <th>Action</th>
               <th>Action</th>
               <th>Action</th>
@@ -21,7 +29,6 @@ const isSearch = (produk) => {
                   <td><Link href="edit"  data={{ id: data.id }} as="button" className="btn btn-info btn-xs text-white">Edit</Link></td>
                   <td><Link href="view" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">View</Link></td>
                   <td><Link href="delete" data={{id: data.id}} method="post" as="button" className="btn btn-error btn-xs text-white">Delete</Link></td>
-                  <td><Link href="/product/download_pdf" data={{id: data.id}} as="button" className="btn btn-info btn-xs text-white">Download</Link></td>
                 </tr>
            })}
 
@@ -36,28 +43,9 @@ const noProduct = () => {
     )
 }
   
-const ProductSearch = ({ produk }) => {
-    return !produk ? noProduct() : isSearch(produk)
+const ProductSearch = ({ produk, searchQuery }) => {
+    return !produk ? noProduct() : isSearch(produk, searchQuery)
 }
 
 
 export default ProductSearch;
-
-// export default function Cari(props) {
-//     <table border="1" cellpadding="10" cellspacing="0">
-//                 <tr>
-//                     <th>NP</th>
-//                     <th>Nama</th>
-//                     <th>Proses</th>
-//                     <th>Estimasi</th>
-//                 </tr>
-//                 return props.produk.map((data, i) => {
-//                     return <tr key={i}>
-//                         <td>{data.no}</td>
-//                         <td>{data.name}</td>
-//                         <td>{data.process}</td>
-//                         <td>{data.est}</td>
-//                     </tr>
-//                 })
-//             </table>
-// }
