@@ -27,7 +27,7 @@
 		</thead>
 		<tbody>
             @php $i=1 @endphp
-			@foreach($product as $p)
+			@foreach($produk as $p)
 			<tr>
 				<td>{{ $i++ }}</td>
 				<td>{{ $p->no }}</td>

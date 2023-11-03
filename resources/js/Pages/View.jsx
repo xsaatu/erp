@@ -27,7 +27,10 @@ export default function View(props) {
             </div>
         </div>
 
-
+        <div>
+          {/* <a href="/product/productpdf" target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+          <a href={`/product/productpdf?produk=${JSON.stringify({ viewProduct: produk, tanggal: tanggal })}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a>
+        </div>
 
         <div className="overflow-x-auto m-5">
             <table className="table table-md">

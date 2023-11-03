@@ -3,13 +3,8 @@ import { Link } from "@inertiajs/react"
 const isSearch = (produk, searchQuery) => {
     return <div className="overflow-x-auto">
         <div>
-        <a
-          href={`/product/search?search=${searchQuery}&download_pdf=1`} // Menambahkan parameter download_pdf
-          target="_blank"
-          as="button"
-          className="btn btn-info btn-xs text-white"
-        >Download</a>
           {/* <a href="/product/productpdf" target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+          <a href={`/product/productlistpdf?produk=${JSON.stringify(produk)}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a>
         </div>
       <table className="table table-zebra">
           <thead>

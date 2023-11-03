@@ -214,35 +214,16 @@ class ProductController extends Controller
     // seacrh
     public function search(Request $request) 
     {
-        // $produk = [];
+        $produk = [];
 
-        // if($request->has('search')) {
-        //     $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
-        // }
-        // // $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
-        // return Inertia::render('Monitor', [
-        //   'produk' => $produk,
-        // ]);
-
-
-        // cara 2
-        if ($request->has('search')) {
-            $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
-    
-            if ($request->has('download_pdf')) {
-                // Jika pengguna ingin mengunduh PDF, maka buat dan kirim PDF sebagai respons
-                $pdf = PDF::loadview('ViewPdf', ['product' => $produk]);
-                return $pdf->stream();
-            }
-    
-            return Inertia::render('Monitor', [
-                'produk' => $produk,
-            ]);
+        if($request->has('search')) {
+            $produk = Product::where('no','LIKE','%'.$request->search.'%')->get();
         }
-
+        // $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
         return Inertia::render('Monitor', [
-            'produk' => [],
+          'produk' => $produk,
         ]);
+
     }
 
     public function view(Product $product, Request $request)
@@ -268,21 +249,59 @@ class ProductController extends Controller
         ]);
     }
 
-    // public function productPDF(Request $request) 
-    // {
-    //     $produk = $request->get('produk');
-    //     if ($produk) {
-    //         $pdf = PDF::loadview('ViewPdf', [
-    //             'produk' => $produk,
-    //         ]);
-    //         return $pdf->stream();
-    //     } else {
-    //         // Tindakan yang akan diambil jika $produk bernilai null atau bukan array
-    //         // Misalnya, mungkin Anda ingin mengembalikan pesan kesalahan.
-    //         return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
-    //     }
-    // }
+    public function productListPDF(Request $request) 
+    {
+        $produk = $request->get('produk');
+    
+        if ($produk) {
+            $produk = json_decode($produk, true); // Jika data dikirimkan sebagai JSON
+            $pdf = PDF::loadview('ViewPdf', [
+                'produk' => $produk,
+            ]);
+            return $pdf->stream();
+        } else {
+            // Tindakan yang akan diambil jika data produk tidak ditemukan
+            return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
+        }
+    }
+
+    public function productPDF(Request $request)
+    {
+        $produk = $request->input('produk');
+        if ($produk) {
+            $produkData = json_decode($produk, true);
+            $proceses = $produkData;
+            $pdf = PDF::loadView('productPdf', [
+                'viewProduct' => $produkData,
+                'tanggalProcess' => $proceses,
+                'tanggal' => $produkData['tanggal'],
+            ]);
+            return $pdf->stream();
+        } else {
+            return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
+        }
+    }
 }
+
+
+        // cara 2
+        // if ($request->has('search')) {
+        //     $produk = Product::where('no', 'LIKE', '%' . $request->search . '%')->get();
+    
+        //     if ($request->has('download_pdf')) {
+        //         // Jika pengguna ingin mengunduh PDF, maka buat dan kirim PDF sebagai respons
+        //         $pdf = PDF::loadview('ViewPdf', ['product' => $produk]);
+        //         return $pdf->stream();
+        //     }
+    
+        //     return Inertia::render('Monitor', [
+        //         'produk' => $produk,
+        //     ]);
+        // }
+
+        // return Inertia::render('Monitor', [
+        //     'produk' => [],
+        // ]);
 
             // PROSES ASLINYA
             // //untuk menghitung tanggal di setiap prosesnya
