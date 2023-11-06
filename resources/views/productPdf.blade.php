@@ -1,3 +1,4 @@
+{{-- productPdf.blade.php --}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,24 +6,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-
-    <pre>{{ json_encode($viewProduct, JSON_PRETTY_PRINT) }}</pre>
-    {{-- <pre>{{ json_encode($viewProduct) }}</pre> --}}
     <h2>Detail Produk</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>No</th>
-                <th>No Order</th>
+                <th>Nama Produk</th>
                 <th>Tanggal Pesan</th>
-                <th>Delivery Date</th>
+                <!-- Tambahkan kolom lainnya sesuai kebutuhan -->
             </tr>
         </thead>
         <tbody>
             <tr>
-                {{-- <td>{{ $viewProduct->no }}</td>
-                <td>{{ $tanggal[0]['tanggal_pesan'] }}</td>
-                <td>{{ $tanggal[0]['delivery_date'] }}</td> --}}
+                <td>{{ $viewProduct['no'] }}</td>
+                <td>{{ $viewProduct['name'] }}</td>
+                <td>{{ $viewProduct['tanggal_pesan'] }}</td>
+                <!-- Tambahkan kolom lainnya sesuai kebutuhan -->
             </tr>
         </tbody>
     </table>
@@ -40,34 +39,15 @@
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach($viewProduct as $key => $value)
-            @if (Str::startsWith($key, 'process'))
-                @php
-                    $processNumber = Str::after($key, 'process');
-                    $estimasiKey = 'estimasi' . $processNumber;
-                    $waitKey = 'wait' . $processNumber;
-                @endphp
-                <tr>
-                    <td>{{ $processNumber }}</td>
-                    <td>{{ $value }}</td>
-                    <td>{{ $viewProduct[$estimasiKey] }}</td>
-                    <td>Actual</td>
-                    <td>{{ $tanggalProcess[$processNumber - 1]['delivery_date'] }}</td>
-                    <td>{{ $viewProduct[$waitKey] }}</td>
-                </tr>
-            @endif
-        @endforeach --}}
-        @foreach($viewProduct as $produk)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $produk->process1 }}</td>
-            <td>{{ $produk->estimasi1}}</td>
-            <td>Actual</td>
-            {{-- <td>{{ $process['delivery_date'] }}</td>
-            <td>{{ $process['wait'] }}</td> --}}
-        </tr>
-        @endforeach
-
+            <tr>
+                <td>1</td>
+                <td>{{ $viewProduct['process1'] }}</td>
+                <td>{{ $viewProduct['estimasi1'] }}</td>
+                <td>Actual</td>
+                <td>{{ $viewProduct['tanggal_pesan'] }}</td> <!-- Misalnya menggunakan tanggal pesan, sesuaikan dengan yang sesuai -->
+                <td>{{ $viewProduct['wait1'] }}</td>
+            </tr>
+            <!-- Tambahkan baris-baris lain sesuai kebutuhan -->
         </tbody>
     </table>
 </body>

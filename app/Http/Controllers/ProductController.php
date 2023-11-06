@@ -246,6 +246,7 @@ class ProductController extends Controller
             'viewProduct' => $produk,
             'tanggalProcess' => $proceses,
             'tanggal' => $tanggal,
+            'produkJson' => json_encode($produk), // Encode data JSON di sini
         ]);
     }
 
@@ -267,22 +268,49 @@ class ProductController extends Controller
 
     public function productPDF(Request $request)
     {
-        $produk = $request->input('produk');
-        if ($produk) {
-            $produkData = json_decode($produk, true);
-            $proceses = $produkData;
-            $pdf = PDF::loadView('productPdf', [
-                'viewProduct' => $produkData,
-                'tanggalProcess' => $proceses,
-                'tanggal' => $produkData['tanggal'],
-            ]);
-            return $pdf->stream();
-        } else {
-            return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
-        }
+        $produkData = $request->query('produk'); // Ambil data dari parameter URL
+
+        $pdf = PDF::loadView('productPdf', [
+            'viewProduct' => $produkData,
+        ]);
+
+        return $pdf->stream(); // Menghasilkan dan menampilkan file PDF
     }
+
+    // public function productPDF(Request $request)
+    // {
+    //     $produk = $request->query('produk'); // Mengambil data dari parameter URL
+    //     // dd($produk);
+    //     // Pastikan untuk memeriksa apakah $produk tidak null dan adalah string JSON yang valid
+    //     if ($produk) {
+    //         $produkData = json_decode(urldecode($produk), true);
+
+    //         // Sekarang Anda dapat menggunakan $produkData sesuai kebutuhan
+    //         $pdf = PDF::loadView('productPdf', [
+    //             'viewProduct' => $produkData,
+    //         ]);
+
+    //         return $pdf->stream();
+    //     } else {
+    //         return response()->json(['message' => 'Data produk tidak valid'], 400);
+    //     }
+    // }
+
 }
 
+    // public function productPDF(Request $request)
+    // {
+    //     $produk = $request->input('produk');
+    //     if ($produk) {
+    //         $produkData = json_decode(urldecode($produk), true);
+    //         $pdf = PDF::loadView('productPdf', [
+    //             'viewProduct' => $produkData,
+    //         ]);
+    //         return $pdf->stream();
+    //     } else {
+    //         return response()->json(['message' => 'Data produk tidak ditemukan'], 404);
+    //     }
+    // }
 
         // cara 2
         // if ($request->has('search')) {
