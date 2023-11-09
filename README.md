@@ -79,3 +79,13 @@
                 </tr>
             @endif
         @endforeach --}}
+
+# Link
+        <div>
+            
+          {/* <a href="/product/productpdf" target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+          {/* <a href={`/product/productpdf?produk=${JSON.stringify(produk)}}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+          {/* <a href={`/product/productpdf?produk={{urlencode(json_encode($produk))}}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+          {/* <a href={`/product/productpdf?produk=${encodeURIComponent(props.produkJson)}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
+
+        </div>

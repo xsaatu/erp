@@ -1,3 +1,4 @@
+import productPDF from "@/Components/Monitor/ProductPdf";
 import Navbar from "@/Components/Navbar";
 import { Link } from "@inertiajs/react";
 import axios from "axios";
@@ -8,6 +9,7 @@ export default function View(props) {
     const produk = props.viewProduct;
     const tanggal = props.tanggalProcess;
     const tanggalPesan = props.tanggal[0];
+    const tengat = props.tanggal[1];
 
     // Render 3
     const nomorProses = Array.from({ length: 15 }, (_, index) => index + 1);
@@ -17,23 +19,18 @@ export default function View(props) {
 
         <Navbar />
 
+        <button onClick={() => productPDF({ data: { produk, tanggal, tanggalPesan, tengat } })}>Download PDF</button>
+
         <div id="head_product">
             <div className="container">
                 <div className="grid grid-cols-3 gap-3 m-5">
                     <div><input className="input-xs" value={produk.no} disabled></input></div>
                     <div><input className="input-xs" value={tanggalPesan.tanggal_pesan} disabled></input></div>
-                    <div><input className="input-xs" value={tanggal[0].delivery_date} disabled></input></div>
+                    <div><input className="input-xs" value={tengat.tengat_waktu} disabled></input></div>
                 </div>
             </div>
         </div>
 
-        <div>
-          {/* <a href="/product/productpdf" target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
-          <a href={`/product/productpdf?produk=${JSON.stringify(produk)}}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a>
-          {/* <a href={`/product/productpdf?produk={{urlencode(json_encode($produk))}}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
-          {/* <a href={`/product/productpdf?produk=${encodeURIComponent(props.produkJson)}`} target="_blank" as="button" className="btn btn-info btn-xs text-white">Download</a> */}
-
-        </div>
 
         <div className="overflow-x-auto m-5">
             <table className="table table-md">

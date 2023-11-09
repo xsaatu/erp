@@ -230,6 +230,7 @@ class ProductController extends Controller
     {
         $produk = $product->find($request->id);
         $tanggalpesan = Carbon::parse($produk->tanggal_pesan);
+        $tengat = Carbon::parse($produk->tengat_waktu);
         $nilaiNumerik = 0.5; // Nilai numerik yang mewakili setengah hari
 
 
@@ -237,7 +238,10 @@ class ProductController extends Controller
                
 
             $tanggal[] = [
-                'tanggal_pesan' => $tanggalpesan->format('d-m-Y')
+                'tanggal_pesan' => $tanggalpesan->format('d-m-Y'),
+            ];
+            $tanggal[] = [
+                'tengat_waktu' => $tengat->format('d-m-Y'),
             ];
 
         $proceses = $product->getView($tanggalpesan, $produk);
@@ -266,16 +270,16 @@ class ProductController extends Controller
         }
     }
 
-    public function productPDF(Request $request)
-    {
-        $produkData = $request->query('produk'); // Ambil data dari parameter URL
+    // public function productPDF(Request $request)
+    // {
+    //     $produkData = $request->query('produk'); // Ambil data dari parameter URL
 
-        $pdf = PDF::loadView('productPdf', [
-            'viewProduct' => $produkData,
-        ]);
+    //     $pdf = PDF::loadView('productPdf', [
+    //         'viewProduct' => $produkData,
+    //     ]);
 
-        return $pdf->stream(); // Menghasilkan dan menampilkan file PDF
-    }
+    //     return $pdf->stream(); // Menghasilkan dan menampilkan file PDF
+    // }
 
     // public function productPDF(Request $request)
     // {

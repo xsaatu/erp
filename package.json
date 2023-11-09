@@ -20,6 +20,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "daisyui": "^3.6.4"
+        "daisyui": "^3.6.4",
+        "jspdf": "^2.5.1"
     }
 }

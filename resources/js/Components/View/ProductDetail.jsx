@@ -1,3 +1,0 @@
-const DetailProduct = (viewProduct) => {
-    return 
-}
