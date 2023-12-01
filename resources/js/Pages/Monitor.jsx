@@ -38,7 +38,7 @@ export default function Monitor(props) {
         console.log(props)
         return <div className="container grid grid-cols-3">
             <div className="col">
-                <div className="mt-5 mx-auto sm:px-6 lg:px-4">
+                <div className="mt-16 mx-auto sm:px-6 lg:px-4">
                     <form action="/product/search" method="GET" className="form-inline">
                         <div className="flex flex-wrap ">
                         <div className="input-group justify-start">
@@ -53,7 +53,7 @@ export default function Monitor(props) {
             </div>
             <div className="col ">
                 <div>
-                    <div className="tab-buttons grid grid-cols-3">
+                    <div className="tab-buttons grid grid-cols-3 mt-16">
                         <div className="col">
                             <button className={`button tab-button ${selectedTab === 'general' ? 'active' : ''}`} onClick={() => setSelectedTab('general')}>
                             General
@@ -82,15 +82,17 @@ export default function Monitor(props) {
     // console.log(props);
     return (
         <>
-        <AuthenticatedLayout
+        {/* <AuthenticatedLayout
             user={props.auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Monitor</h2>}
-        >
+        > */}
         <Head title="Monitor"/>
+
+        <Navbar />
 
         <Find produk={props.produk}/>
 
-        <div className='flex justify-center flex-col lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4'>
+        <div className='flex justify-center flex-col mt-10 lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4'>
             {/* <ProductLists product={props.product.data} /> */}
             <ProductSearch produk={props.produk}/>
 
@@ -100,7 +102,7 @@ export default function Monitor(props) {
                 {selectedTab === 'machine' && <MachineTabContent />}
             </div> */}
         </div>
-            </AuthenticatedLayout>
+            {/* </AuthenticatedLayout> */}
         </>
     )
 }
