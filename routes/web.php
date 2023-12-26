@@ -22,13 +22,13 @@ Route::get('/', [ProductController::class, 'login']);
 Route::post('/product', [ProductController::class, 'store']);
 Route::get('/monitor', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('monitor');
 Route::get('/product', [ProductController::class, 'show'])->middleware(['auth', 'verified'])->name('my.product');
-Route::get('/product/edit', [ProductController::class, 'edit'], [MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('edit.product');
+Route::get('/product/edit', [ProductController::class, 'edit'], [MachineController::class, 'index'])->middleware(['auth', 'verified'])->name('edit.product');
 Route::post('/product/update', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update.product');
 Route::get('/product/search', [ProductController::class, 'search'])->middleware(['auth', 'verified'])->name('my.product');
 Route::get('/product/view', [ProductController::class, 'view'])->middleware(['auth', 'verified'])->name('view.product');
 Route::get('/product/productlistpdf', [ProductController::class, 'productListPDF'], [ProductController::class, 'search'])->name('downloadlist.product');
 // Route::get('/product/productpdf', [ProductController::class, 'productPDF'])->name('download.product');
-Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [ProductController::class, 'index2'],[MachineController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/plandate', [ProductController::class, 'plan'])->middleware(['auth', 'verified'])->name('plan');
 
@@ -36,6 +36,8 @@ Route::get('/plandate', [ProductController::class, 'plan'])->middleware(['auth',
 
 Route::post('/machine', [MachineController::class, 'store']);
 Route::post('/product/delete', [ProductController::class, 'destroy'])->middleware(['auth', 'verified'])->name('delete.product');
+
+Route::get('/capacity', [ProductController::class, 'capacity'])->middleware(['auth', 'verified'])->name('capacity');
 
 // Route::get('/product', [ProductController::class, 'index']);
 

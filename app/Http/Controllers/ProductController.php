@@ -288,6 +288,42 @@ class ProductController extends Controller
             'priorities' => $sortedPriorities,
         ]);
     }
+
+    public function capacity(Product $product) 
+    {
+        // Mendapatkan data produk dari model Product
+        $produk = Product::all();
+
+        // Menghitung total menit per mesin untuk seluruh produk
+        $totalMenitPerMesin = [];
+
+        foreach ($produk as $pesanan) {
+            $this->accumulateTotalMenitPerMesin($totalMenitPerMesin, $pesanan);
+        }
+
+        // Mengirimkan data ke halaman 'Capacity' menggunakan Inertia
+        return Inertia::render('Capacity', [
+            'produk' => $produk,
+            'totalMenitPerMesin' => $totalMenitPerMesin,
+        ]);
+    }
+    
+    // Metode untuk menghitung total menit per mesin
+    private function accumulateTotalMenitPerMesin(&$totalMenitPerMesin, $pesanan)
+    {
+        for ($i = 1; $i <= 15; $i++) {
+            $estimasiKey = "estimasi$i";
+            $waitKey = "wait$i";
+            $mesinKey = "process$i";
+    
+            if ($pesanan->$mesinKey && $pesanan->$estimasiKey) {
+                $totalMenitPerMesin[$pesanan->$mesinKey] = ($totalMenitPerMesin[$pesanan->$mesinKey] ?? 0) + $pesanan->$estimasiKey;
+                // $totalMenitPerMesin[$pesanan->$mesinKey] += $pesanan->$waitKey ?? 0;
+            }
+        }
+    }
+
+
     // public function productPDF(Request $request)
     // {
     //     $produkData = $request->query('produk'); // Ambil data dari parameter URL

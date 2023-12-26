@@ -26,6 +26,11 @@ export default function SideBar() {
                         <span className="text-lg">Plan Date</span>
                     </NavLink>
                 </div>
+                <div className="col mt-5 text-center">
+                    <NavLink href={route('capacity')}>
+                        <span className="text-lg">Capacity</span>
+                    </NavLink>
+                </div>
             </div>
            </div>
         </nav>
