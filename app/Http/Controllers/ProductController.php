@@ -270,6 +270,24 @@ class ProductController extends Controller
         }
     }
 
+    public function plan(Product $product, Request $request)
+    {
+        $produk = $product->all(); // Menggunakan all() untuk mendapatkan semua produk
+
+        $priorities = collect(); // Membuat koleksi kosong untuk diisi
+
+        foreach ($produk as $singleProduct) {
+            $priorities->push($singleProduct->getPriority());
+        }
+
+        // Urutkan koleksi berdasarkan prioritas (dari yang terkecil ke terbesar)
+        $sortedPriorities = $priorities->sortBy('priority');
+
+        return Inertia::render('PlanDate', [
+            'produk' => $sortedPriorities->pluck('product'), // Ambil hanya produk tanpa prioritas
+            'priorities' => $sortedPriorities,
+        ]);
+    }
     // public function productPDF(Request $request)
     // {
     //     $produkData = $request->query('produk'); // Ambil data dari parameter URL

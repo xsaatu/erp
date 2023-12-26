@@ -51,14 +51,15 @@ class Product extends Model
         // Menghitung tanggal di setiap prosesnya
         for ($i = 0; $i < 16; $i++) {
             $processColumnName = "process" . ($i + 1);
-            $wt = $produk->wait . ($i + 1);
+            $wt = $produk->wait . ($i + 1) * 24;
+            $estTimes = $produk->estimasi . ($i + 1) / 60;
                 
             if (!empty($produk->$processColumnName)) {
                 // Memastikan tanggal per proses tidak kurang dari tanggal pemesanan
                 $processDate = $deliveryDate->copy()->max($tanggalpesan);
                 
-                // Menambahkan setengah hari ke tanggal per proses
-                $processDate->subHour((double)$wt * 24)->toDateTimeString();
+                // $processDate->subHour($wt)->toDateString(); // mengurangkan dari waktu tunggu satuannya jam 
+                $processDate->subMinute($estTimes )->toDateString(); // mengurangkan dari estimasi satuannya menit
                 
                 $proceses[] = [
                     'step' => $i + 1, // Langkah ke-
@@ -70,4 +71,18 @@ class Product extends Model
         } 
         return $proceses;
     }
+
+    public function getPriority()
+    {
+        $dataLength = 0;
+        for ($i = 1; $i <= 15; $i++) {
+            $processKey = "process$i";
+            if (!empty($this->$processKey)) {
+                $dataLength++;
+            }
+        }
+
+        return $dataLength;
+    }
+    
 }

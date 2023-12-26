@@ -30,6 +30,8 @@ Route::get('/product/productlistpdf', [ProductController::class, 'productListPDF
 // Route::get('/product/productpdf', [ProductController::class, 'productPDF'])->name('download.product');
 Route::get('/dashboard', [ProductController::class, 'index2'],[MachineContorller::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/plandate', [ProductController::class, 'plan'])->middleware(['auth', 'verified'])->name('plan');
+
 // Route::get('/machine', [ProductController::class, 'select']);
 
 Route::post('/machine', [MachineController::class, 'store']);
