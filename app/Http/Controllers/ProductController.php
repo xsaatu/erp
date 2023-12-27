@@ -293,6 +293,7 @@ class ProductController extends Controller
     {
         // Mendapatkan data produk dari model Product
         $produk = Product::all();
+        $machines = Machine::all();
 
         // Menghitung total menit per mesin untuk seluruh produk
         $totalMenitPerMesin = [];
@@ -303,8 +304,9 @@ class ProductController extends Controller
 
         // Mengirimkan data ke halaman 'Capacity' menggunakan Inertia
         return Inertia::render('Capacity', [
+            'machine' => $machines,
             'produk' => $produk,
-            'totalMenitPerMesin' => $totalMenitPerMesin,
+            'total' => $totalMenitPerMesin,
         ]);
     }
     
